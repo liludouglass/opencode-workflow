@@ -1,0 +1,57 @@
+/**
+ * Shared TypeScript interfaces for Ralph Wiggum plugin
+ * 
+ * Re-exports all types from other modules for easy importing.
+ */
+
+// Task Executor types
+export type {
+  RalphConfig,
+  TaskResult,
+  TaskContext
+} from "./task-executor"
+
+// Wave Coordinator types
+export type {
+  Wave,
+  WaveResult
+} from "./wave-coordinator"
+
+// CI Enforcer types
+export type {
+  CIConfig,
+  CIResult
+} from "./ci-enforcer"
+
+// Additional shared types
+export interface PluginContext {
+  sessionID?: string
+  workdir?: string
+  featureDir?: string
+}
+
+export interface LogEntry {
+  timestamp: string
+  taskId: string
+  iteration: number
+  status: string
+  message: string
+}
+
+export interface TaskProgress {
+  taskId: string
+  status: "pending" | "in_progress" | "complete" | "failed"
+  iterations: number
+  lastUpdate: string
+  errorMessage?: string
+}
+
+export interface WaveProgress {
+  waveNumber: number
+  totalTasks: number
+  completedTasks: number
+  failedTasks: number
+  status: "pending" | "running" | "complete" | "failed"
+  startTime?: string
+  endTime?: string
+}

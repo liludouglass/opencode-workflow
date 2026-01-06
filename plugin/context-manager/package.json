@@ -1,0 +1,26 @@
+{
+  "name": "opencode-context-manager",
+  "version": "1.0.0",
+  "description": "Context bundle generator for Ralph Wiggum pattern - fresh context per iteration",
+  "type": "module",
+  "main": "index.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "peerDependencies": {
+    "@opencode-ai/plugin": "*"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.27",
+    "typescript": "^5.9.3"
+  },
+  "keywords": [
+    "opencode",
+    "plugin",
+    "context",
+    "ralph-wiggum"
+  ],
+  "author": "",
+  "license": "MIT"
+}

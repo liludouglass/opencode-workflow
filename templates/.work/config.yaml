@@ -1,0 +1,43 @@
+# .work/config.yaml
+# Agentic Workflow Orchestration System Configuration
+
+workflow:
+  max_parallel_tasks: 3        # Simultaneous Ralph loops
+  voting_agents: 3             # For MAKER-style voting (configurable)
+
+ralph:
+  max_iterations_per_task: 10  # Before escalating to human
+  complete_signal: "<complete/>"
+  require_ci_green: true       # MUST pass tests before commit
+
+context:
+  max_tokens_per_task: 8000    # Target context bundle size
+  progress_history: 10         # Last N entries to include
+  prune_completed_tasks: true  # Only keep IDs of done tasks
+
+gates:
+  require_human:
+    - shaping_approval         # After Phase 1
+    - spec_approval            # After Phase 2
+  optional_human:
+    - final_review             # Per-feature flag
+
+ci:
+  type_check: "npm run type-check"
+  lint: "npm run lint"
+  test: "npm test"
+  build: "npm run build"       # Optional
+
+complexity:
+  simple:
+    max_tasks: 3
+    spec_depth: L2
+    enable_voting: false
+  medium:
+    max_tasks: 7
+    spec_depth: L3
+    enable_voting: true        # On uncertain steps
+  complex:
+    max_tasks: unlimited
+    spec_depth: L4
+    enable_voting: true        # On all complex steps

@@ -1,0 +1,19 @@
+{
+  "name": "opencode-ralph-wiggum",
+  "version": "0.1.0",
+  "description": "Ralph Wiggum task execution engine for OpenCode",
+  "main": "index.ts",
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "bun test"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/bun": "latest",
+    "typescript": "^5.0.0"
+  },
+  "peerDependencies": {
+    "@opencode-ai/plugin": "*"
+  }
+}
