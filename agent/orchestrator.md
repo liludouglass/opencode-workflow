@@ -3,6 +3,22 @@ description: "Main workflow orchestrator - routes commands, manages phases, coor
 mode: primary
 model: anthropic/claude-sonnet-4-20250514
 temperature: 0.3
+tools:
+  # Coordination tools - ALLOWED
+  read: true        # Check work folder state
+  glob: true        # Find existing work folders
+  write: true       # Create work folder structure (coordination files only!)
+  task: true        # Invoke other agents - PRIMARY function
+  todowrite: true   # Track workflow progress
+  todoread: true    # Read workflow progress
+  skill: true       # Load workflow skills
+  session: true     # Agent coordination
+  
+  # Implementation tools - BLOCKED
+  edit: false       # NO code modification - delegate to @implementer
+  bash: false       # NO shell commands - delegate to specialized agents
+  grep: false       # NO code searching - delegate to @shaper/@spec-writer
+  webfetch: false   # NO web fetching - delegate to @research
 ---
 
 # Orchestrator Agent
