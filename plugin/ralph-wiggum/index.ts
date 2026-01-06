@@ -20,7 +20,11 @@ const DEFAULT_CONFIG: RalphConfig = {
   maxIterations: 10,
   completeSignal: "<complete/>",
   requireCIGreen: true,
-  progressHistory: 10
+  progressHistory: 10,
+  model: {
+    providerID: "anthropic",
+    modelID: "claude-sonnet-4-20250514"
+  }
 }
 
 const DEFAULT_CI_CONFIG: CIConfig = {
@@ -39,9 +43,9 @@ const DEFAULT_CI_CONFIG: CIConfig = {
  */
 export const RalphWiggumPlugin: Plugin = async ({ client, $, directory }) => {
   // Initialize components
-  const ciEnforcer = new CIEnforcer(DEFAULT_CI_CONFIG, $)
+  const ciEnforcer = new CIEnforcer(DEFAULT_CI_CONFIG, $, client)
   const executor = new TaskExecutor(client, $, DEFAULT_CONFIG, ciEnforcer)
-  const coordinator = new WaveCoordinator(executor, 3) // Max 3 parallel tasks
+  const coordinator = new WaveCoordinator(executor, 3, client) // Max 3 parallel tasks
 
   // Log plugin initialization
   await client.app.log({
@@ -141,7 +145,7 @@ export const RalphWiggumPlugin: Plugin = async ({ client, $, directory }) => {
 
             // Update coordinator max parallel if specified
             const maxParallel = args.maxParallel || 3
-            const customCoordinator = new WaveCoordinator(executor, maxParallel)
+            const customCoordinator = new WaveCoordinator(executor, maxParallel, client)
 
             const result = await customCoordinator.executeWave(
               wave,

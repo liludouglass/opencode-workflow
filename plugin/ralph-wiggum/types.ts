@@ -55,3 +55,16 @@ export interface WaveProgress {
   startTime?: string
   endTime?: string
 }
+
+// OpenCode client interface (using any for compatibility with actual client)
+export type OpenCodeClient = any
+
+export interface LogParams {
+  service: string
+  level: "debug" | "info" | "warn" | "error"
+  message: string
+  extra?: Record<string, unknown>
+}
+
+// Shell function type (using any for compatibility with Bun shell)
+export type ShellFunction = any

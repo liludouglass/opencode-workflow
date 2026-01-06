@@ -158,13 +158,16 @@ export class SpecExtractor {
     const relevantSections: SpecSection[] = [];
     const taskKeywords = this.extractKeywords(taskInfo.description);
     
+    // Create regex pattern for efficient keyword matching
+    const keywordPattern = taskKeywords.length > 0 
+      ? new RegExp(taskKeywords.join('|'), 'i')
+      : null;
+    
     for (const section of sections) {
       const sectionText = (section.title + ' ' + section.content).toLowerCase();
       
       // Check if section contains task-related keywords
-      const hasRelevantKeywords = taskKeywords.some(keyword => 
-        sectionText.includes(keyword.toLowerCase())
-      );
+      const hasRelevantKeywords = keywordPattern ? keywordPattern.test(sectionText) : false;
       
       // Include high-level sections (overview, architecture, etc.)
       const isHighLevel = section.level <= 2;
@@ -215,23 +218,38 @@ export class SpecExtractor {
     
     // Extract task information
     if (fs.existsSync(tasksPath)) {
-      const tasksContent = fs.readFileSync(tasksPath, 'utf-8');
-      taskInfo = this.parseTaskInfo(tasksContent, taskId);
+      try {
+        const tasksContent = fs.readFileSync(tasksPath, 'utf-8');
+        taskInfo = this.parseTaskInfo(tasksContent, taskId);
+      } catch (error) {
+        console.warn(`Failed to read ${tasksPath}: ${error}`);
+        taskInfo = null;
+      }
     }
     
     // Extract relevant spec sections
     if (fs.existsSync(specPath) && taskInfo) {
-      const specContent = fs.readFileSync(specPath, 'utf-8');
-      const allSections = this.parseMarkdownSections(specContent);
-      const relevantSections = this.findRelevantSpecSections(allSections, taskInfo);
-      specSections = relevantSections.map(section => section.content);
+      try {
+        const specContent = fs.readFileSync(specPath, 'utf-8');
+        const allSections = this.parseMarkdownSections(specContent);
+        const relevantSections = this.findRelevantSpecSections(allSections, taskInfo);
+        specSections = relevantSections.map(section => section.content);
+      } catch (error) {
+        console.warn(`Failed to read ${specPath}: ${error}`);
+        specSections = [];
+      }
     }
     
     // Extract relevant acceptance criteria
     if (fs.existsSync(acceptancePath)) {
-      const acceptanceContent = fs.readFileSync(acceptancePath, 'utf-8');
-      const criteria = this.parseAcceptanceCriteria(acceptanceContent, taskId);
-      acceptanceCriteria = criteria.map(ac => `${ac.id}: ${ac.description}`);
+      try {
+        const acceptanceContent = fs.readFileSync(acceptancePath, 'utf-8');
+        const criteria = this.parseAcceptanceCriteria(acceptanceContent, taskId);
+        acceptanceCriteria = criteria.map(ac => `${ac.id}: ${ac.description}`);
+      } catch (error) {
+        console.warn(`Failed to read ${acceptancePath}: ${error}`);
+        acceptanceCriteria = [];
+      }
     }
     
     return {

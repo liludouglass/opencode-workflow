@@ -159,7 +159,7 @@ Status: ${entry.status || 'unknown'}`;
     
     // Add files to modify (critical for implementation)
     for (const file of filesToModify) {
-      if (!TokenCounter.wouldExceedBudget(currentTokens, file, currentTokens + reservedTokens.filesToModify)) {
+      if (!TokenCounter.wouldExceedBudget(currentTokens, file, reservedTokens.filesToModify)) {
         result.filesToModify.push(file);
         currentTokens += TokenCounter.estimateTokens(file);
       }
@@ -167,7 +167,7 @@ Status: ${entry.status || 'unknown'}`;
     
     // Add recent progress (important for context)
     for (const progress of recentProgress) {
-      if (!TokenCounter.wouldExceedBudget(currentTokens, progress, currentTokens + reservedTokens.recentProgress)) {
+      if (!TokenCounter.wouldExceedBudget(currentTokens, progress, reservedTokens.recentProgress)) {
         result.recentProgress.push(progress);
         currentTokens += TokenCounter.estimateTokens(progress);
       }
@@ -197,6 +197,11 @@ Status: ${entry.status || 'unknown'}`;
    * Generate context bundle for a specific task
    */
   async generate(taskId: string, featureDir: string): Promise<ContextBundle> {
+    // Validate feature directory exists
+    if (!fs.existsSync(featureDir)) {
+      throw new Error(`Feature directory not found: ${featureDir}`);
+    }
+    
     // Extract spec sections and acceptance criteria
     const { specSections, acceptanceCriteria, taskInfo } = await this.specExtractor.extractForTask(featureDir, taskId);
     
@@ -207,9 +212,14 @@ Status: ${entry.status || 'unknown'}`;
     let recentProgress: string[] = [];
     const progressPath = path.join(featureDir, 'progress.md');
     if (fs.existsSync(progressPath)) {
-      const progressContent = fs.readFileSync(progressPath, 'utf-8');
-      const progressEntries = this.parseProgressEntries(progressContent);
-      recentProgress = this.getRecentProgress(progressEntries, taskId);
+      try {
+        const progressContent = fs.readFileSync(progressPath, 'utf-8');
+        const progressEntries = this.parseProgressEntries(progressContent);
+        recentProgress = this.getRecentProgress(progressEntries, taskId);
+      } catch (error) {
+        console.warn(`Failed to read ${progressPath}: ${error}`);
+        recentProgress = [];
+      }
     }
     
     // Fit everything within token budget

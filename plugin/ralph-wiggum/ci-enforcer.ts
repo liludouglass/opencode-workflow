@@ -6,6 +6,8 @@
  * Supports configurable commands per project.
  */
 
+import type { OpenCodeClient, ShellFunction } from "./types"
+
 export interface CIConfig {
   typeCheck: string
   lint: string
@@ -21,7 +23,8 @@ export interface CIResult {
 export class CIEnforcer {
   constructor(
     private config: CIConfig,
-    private shell: any
+    private shell: ShellFunction,
+    private client?: OpenCodeClient
   ) {}
 
   /**
@@ -64,17 +67,27 @@ export class CIEnforcer {
    */
   private async runCheck(name: string, command: string, workdir: string): Promise<boolean> {
     try {
-      const result = await this.shell({
-        command,
-        cwd: workdir,
-        timeout: 120000 // 2 minutes timeout
-      })
+      // Use shell with proper command execution
+      const result = await this.shell`cd ${workdir} && ${command}`
 
       // Check exit code
       return result.exitCode === 0
     } catch (error) {
       // Command failed or timed out
-      console.error(`CI check '${name}' failed:`, error)
+      if (this.client) {
+        try {
+          await this.client.app.log({
+            body: {
+              service: "ralph-wiggum",
+              level: "error",
+              message: `CI check '${name}' failed`,
+              extra: { error: error instanceof Error ? error.message : String(error), workdir, command }
+            }
+          })
+        } catch (logError) {
+          // Ignore logging errors
+        }
+      }
       return false
     }
   }

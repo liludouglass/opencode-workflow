@@ -8,6 +8,7 @@
  */
 
 import type { CIEnforcer } from "./ci-enforcer"
+import type { OpenCodeClient, ShellFunction } from "./types"
 import * as fs from "fs"
 import * as path from "path"
 
@@ -16,6 +17,10 @@ export interface RalphConfig {
   completeSignal: string
   requireCIGreen: boolean
   progressHistory: number
+  model?: {
+    providerID: string
+    modelID: string
+  }
 }
 
 export interface TaskResult {
@@ -37,8 +42,8 @@ export interface TaskContext {
 
 export class TaskExecutor {
   constructor(
-    private client: any,
-    private shell: any,
+    private client: OpenCodeClient,
+    private shell: ShellFunction,
     private config: RalphConfig,
     private ciEnforcer: CIEnforcer
   ) {}
@@ -153,21 +158,20 @@ export class TaskExecutor {
     const specPath = path.join(featureDir, "spec.md")
     if (fs.existsSync(specPath)) {
       const specContent = fs.readFileSync(specPath, "utf-8")
-      context.specSections = [specContent] // TODO: Extract relevant sections only
+      context.specSections = [specContent] // Full spec content for now
     }
 
     // Read acceptance.md
     const acceptancePath = path.join(featureDir, "acceptance.md")
     if (fs.existsSync(acceptancePath)) {
       const acceptanceContent = fs.readFileSync(acceptancePath, "utf-8")
-      context.acceptanceCriteria = [acceptanceContent] // TODO: Filter by task
+      context.acceptanceCriteria = [acceptanceContent] // Full acceptance criteria for now
     }
 
     // Read tasks.md to get files to modify
     const tasksPath = path.join(featureDir, "tasks.md")
     if (fs.existsSync(tasksPath)) {
       const tasksContent = fs.readFileSync(tasksPath, "utf-8")
-      // TODO: Parse task-specific files to modify
       context.filesToModify = this.extractFilesToModify(tasksContent, taskId)
     }
 
@@ -198,7 +202,7 @@ export class TaskExecutor {
           parentID: parentSessionId
         }
       })
-      return response.data || response
+      return response.data || response || { id: `fallback-${Date.now()}` }
     } catch (error) {
       // Fallback: return a mock session if creation fails
       return { id: `mock-${Date.now()}` }
@@ -218,7 +222,7 @@ export class TaskExecutor {
       const response = await this.client.session.prompt({
         path: { id: sessionId },
         body: {
-          model: {
+          model: this.config.model || {
             providerID: "anthropic",
             modelID: "claude-sonnet-4-20250514"
           },
@@ -233,10 +237,12 @@ export class TaskExecutor {
       const result = response.data || response
       if (typeof result === "string") {
         return result
-      } else if (result.content) {
-        return result.content
-      } else if (result.message) {
-        return result.message
+      } else if (result && typeof result === "object") {
+        if ("content" in result && result.content) {
+          return result.content
+        } else if ("message" in result && result.message) {
+          return result.message
+        }
       }
       return JSON.stringify(result)
     } catch (error) {
@@ -319,14 +325,18 @@ Begin implementation now.`
       fs.appendFileSync(progressPath, entry)
     } catch (error) {
       // Log error but don't fail the task
-      await this.client.app.log({
-        body: {
-          service: "ralph-wiggum",
-          level: "warn",
-          message: `Failed to log progress for ${taskId}`,
-          extra: { error: error instanceof Error ? error.message : String(error) }
-        }
-      })
+      try {
+        await this.client.app.log({
+          body: {
+            service: "ralph-wiggum",
+            level: "warn",
+            message: `Failed to log progress for ${taskId}`,
+            extra: { error: error instanceof Error ? error.message : String(error) }
+          }
+        })
+      } catch (logError) {
+        // Ignore logging errors
+      }
     }
   }
 
@@ -334,9 +344,49 @@ Begin implementation now.`
    * Extract files to modify from tasks.md content
    */
   private extractFilesToModify(tasksContent: string, taskId: string): string[] {
-    // TODO: Implement proper parsing
-    // For now, return empty array
-    return []
+    const lines = tasksContent.split('\n')
+    const files: string[] = []
+    let inTask = false
+    let inFilesSection = false
+    
+    for (const line of lines) {
+      // Check if we're entering the target task section
+      if (line.includes(taskId)) {
+        inTask = true
+        continue
+      }
+      
+      // Check if we've hit the next task section (exit)
+      if (inTask && line.match(/^###?\s+TASK-\d+/)) {
+        break
+      }
+      
+      // Check for "Files to Modify" or similar section headers
+      if (inTask && line.match(/files?\s*(to\s*)?(modify|change|touch)/i)) {
+        inFilesSection = true
+        continue
+      }
+      
+      // Extract file paths from list items
+      if (inTask && inFilesSection) {
+        // Match patterns like: - `src/file.ts` or - src/file.ts (create)
+        const backtickMatch = line.match(/^\s*-\s*`([^`]+)`/)
+        const plainMatch = line.match(/^\s*-\s*([^\s(]+)/)
+        
+        if (backtickMatch && backtickMatch[1]) {
+          files.push(backtickMatch[1])
+        } else if (plainMatch && plainMatch[1] && plainMatch[1].includes('/')) {
+          files.push(plainMatch[1])
+        }
+        
+        // Exit files section if we hit another section header
+        if (line.match(/^#+\s/) || line.match(/^\*\*/)) {
+          inFilesSection = false
+        }
+      }
+    }
+    
+    return files
   }
 
   /**

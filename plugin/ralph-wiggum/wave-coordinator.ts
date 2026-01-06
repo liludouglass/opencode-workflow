@@ -7,6 +7,7 @@
  */
 
 import { TaskExecutor, type TaskResult } from "./task-executor"
+import type { OpenCodeClient } from "./types"
 
 export interface Wave {
   waveNumber: number
@@ -24,7 +25,8 @@ export interface WaveResult {
 export class WaveCoordinator {
   constructor(
     private taskExecutor: TaskExecutor,
-    private maxParallel: number = 3
+    private maxParallel: number = 3,
+    private client?: OpenCodeClient
   ) {}
 
   /**
@@ -94,7 +96,20 @@ export class WaveCoordinator {
       // Stop if wave failed and has dependent tasks
       if (!waveResult.allComplete) {
         // Log that subsequent waves are blocked
-        console.log(`Wave ${wave.waveNumber} failed. Subsequent waves blocked.`)
+        if (this.client) {
+          try {
+            await this.client.app.log({
+              body: {
+                service: "ralph-wiggum",
+                level: "warn",
+                message: `Wave ${wave.waveNumber} failed. Subsequent waves blocked.`,
+                extra: { waveNumber: wave.waveNumber, failedTasks: Array.from(waveResult.results.entries()).filter(([, result]) => result.status !== "complete").map(([taskId]) => taskId) }
+              }
+            })
+          } catch (logError) {
+            // Ignore logging errors
+          }
+        }
         break
       }
     }

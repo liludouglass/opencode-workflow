@@ -9,10 +9,7 @@ import { ContextBundle } from './types.js';
  * of fresh context per iteration.
  */
 export default class ContextManagerPlugin {
-  private bundleGenerator: BundleGenerator;
-
   constructor() {
-    this.bundleGenerator = new BundleGenerator();
     console.log('[ContextManager] Plugin initialized - Ralph Wiggum pattern enabled');
   }
 
@@ -128,4 +125,3 @@ export default class ContextManagerPlugin {
 
 // Export the plugin class and types
 export { ContextBundle, BundleGenerator, TokenCounter };
-export type { ContextBundle as IContextBundle };
