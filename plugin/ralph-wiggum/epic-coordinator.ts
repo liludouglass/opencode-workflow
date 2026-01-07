@@ -1,28 +1,28 @@
 /**
- * Wave Coordinator - Parallel task execution
+ * Epic Coordinator - Parallel task execution
  * 
- * Coordinates execution of independent tasks in waves.
- * Tasks within a wave can run in parallel (up to maxParallel).
- * Waves must complete before the next wave starts.
+ * Coordinates execution of independent tasks in epics.
+ * Tasks within an epic can run in parallel (up to maxParallel).
+ * Epics must complete before the next epic starts.
  */
 
 import { TaskExecutor, type TaskResult } from "./task-executor"
 import type { OpenCodeClient } from "./types"
 
-export interface Wave {
-  waveNumber: number
+export interface Epic {
+  epicNumber: number
   tasks: string[]
   status: "pending" | "running" | "complete" | "failed"
 }
 
-export interface WaveResult {
-  waveNumber: number
+export interface EpicResult {
+  epicNumber: number
   results: Map<string, TaskResult>
   allComplete: boolean
   duration: number
 }
 
-export class WaveCoordinator {
+export class EpicCoordinator {
   constructor(
     private taskExecutor: TaskExecutor,
     private maxParallel: number = 3,
@@ -30,22 +30,22 @@ export class WaveCoordinator {
   ) {}
 
   /**
-   * Execute all tasks in a wave
+   * Execute all tasks in an epic
    * Tasks are batched by maxParallel for concurrent execution
    */
-  async executeWave(
-    wave: Wave,
+  async executeEpic(
+    epic: Epic,
     featureDir: string,
     parentSessionId?: string
-  ): Promise<WaveResult> {
+  ): Promise<EpicResult> {
     const startTime = Date.now()
     const results = new Map<string, TaskResult>()
 
-    // Update wave status
-    wave.status = "running"
+    // Update epic status
+    epic.status = "running"
 
     // Batch tasks for parallel execution
-    const batches = this.batchTasks(wave.tasks, this.maxParallel)
+    const batches = this.batchTasks(epic.tasks, this.maxParallel)
 
     for (const batch of batches) {
       // Execute batch in parallel
@@ -69,10 +69,10 @@ export class WaveCoordinator {
       result => result.status === "complete"
     )
 
-    wave.status = allComplete ? "complete" : "failed"
+    epic.status = allComplete ? "complete" : "failed"
 
     return {
-      waveNumber: wave.waveNumber,
+      epicNumber: epic.epicNumber,
       results,
       allComplete,
       duration: Date.now() - startTime
@@ -80,30 +80,30 @@ export class WaveCoordinator {
   }
 
   /**
-   * Execute multiple waves in sequence
+   * Execute multiple epics in sequence
    */
-  async executeAllWaves(
-    waves: Wave[],
+  async executeAllEpics(
+    epics: Epic[],
     featureDir: string,
     parentSessionId?: string
-  ): Promise<WaveResult[]> {
-    const results: WaveResult[] = []
+  ): Promise<EpicResult[]> {
+    const results: EpicResult[] = []
 
-    for (const wave of waves) {
-      const waveResult = await this.executeWave(wave, featureDir, parentSessionId)
-      results.push(waveResult)
+    for (const epic of epics) {
+      const epicResult = await this.executeEpic(epic, featureDir, parentSessionId)
+      results.push(epicResult)
 
-      // Stop if wave failed and has dependent tasks
-      if (!waveResult.allComplete) {
-        // Log that subsequent waves are blocked
+      // Stop if epic failed and has dependent tasks
+      if (!epicResult.allComplete) {
+        // Log that subsequent epics are blocked
         if (this.client) {
           try {
             await this.client.app.log({
               body: {
                 service: "ralph-wiggum",
                 level: "warn",
-                message: `Wave ${wave.waveNumber} failed. Subsequent waves blocked.`,
-                extra: { waveNumber: wave.waveNumber, failedTasks: Array.from(waveResult.results.entries()).filter(([, result]) => result.status !== "complete").map(([taskId]) => taskId) }
+                message: `Epic ${epic.epicNumber} failed. Subsequent epics blocked.`,
+                extra: { epicNumber: epic.epicNumber, failedTasks: Array.from(epicResult.results.entries()).filter(([, result]) => result.status !== "complete").map(([taskId]) => taskId) }
               }
             })
           } catch (logError) {

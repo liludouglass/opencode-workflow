@@ -6,13 +6,13 @@
  * - Clear stop condition (<complete/> signal)
  * - Progress persistence
  * - CI-green enforcement
- * - Wave-based parallel execution
+ * - Epic-based parallel execution
  */
 
 import type { Plugin } from "@opencode-ai/plugin"
 import { tool } from "@opencode-ai/plugin"
 import { TaskExecutor, type RalphConfig, type TaskResult } from "./task-executor"
-import { WaveCoordinator, type Wave, type WaveResult } from "./wave-coordinator"
+import { EpicCoordinator, type Epic, type EpicResult } from "./epic-coordinator"
 import { CIEnforcer, type CIConfig } from "./ci-enforcer"
 
 // Default configuration
@@ -38,14 +38,14 @@ const DEFAULT_CI_CONFIG: CIConfig = {
  * 
  * Provides tools for executing tasks using the Ralph Wiggum pattern:
  * - ralph_execute_task: Execute a single task with iteration loop
- * - ralph_execute_wave: Execute a wave of parallel tasks
+ * - ralph_execute_epic: Execute an epic of parallel tasks
  * - ralph_task_status: Check status of a task
  */
 export const RalphWiggumPlugin: Plugin = async ({ client, $, directory }) => {
   // Initialize components
   const ciEnforcer = new CIEnforcer(DEFAULT_CI_CONFIG, $, client)
   const executor = new TaskExecutor(client, $, DEFAULT_CONFIG, ciEnforcer)
-  const coordinator = new WaveCoordinator(executor, 3, client) // Max 3 parallel tasks
+  const coordinator = new EpicCoordinator(executor, 3, client) // Max 3 parallel tasks
 
   // Log plugin initialization
   await client.app.log({
@@ -115,13 +115,13 @@ export const RalphWiggumPlugin: Plugin = async ({ client, $, directory }) => {
         }
       }),
 
-      /**
-       * Execute a wave of parallel tasks
-       */
-      ralph_execute_wave: tool({
-        description: "Execute a wave of independent tasks in parallel. Tasks must not have dependencies on each other.",
+       /**
+        * Execute an epic of parallel tasks
+        */
+       ralph_execute_epic: tool({
+        description: "Execute an epic of independent tasks in parallel. Tasks must not have dependencies on each other.",
         args: {
-          waveNumber: tool.schema.number().describe("Wave number for logging"),
+          epicNumber: tool.schema.number().describe("Epic number for logging"),
           taskIds: tool.schema.array(tool.schema.string()).describe("Array of task IDs to execute in parallel"),
           featureDir: tool.schema.string().describe("Path to feature directory"),
           maxParallel: tool.schema.number().optional().describe("Maximum parallel tasks (default: 3)")
@@ -131,30 +131,30 @@ export const RalphWiggumPlugin: Plugin = async ({ client, $, directory }) => {
             body: {
               service: "ralph-wiggum",
               level: "info",
-              message: `Starting wave ${args.waveNumber} with ${args.taskIds.length} tasks`,
+              message: `Starting epic ${args.epicNumber} with ${args.taskIds.length} tasks`,
               extra: { taskIds: args.taskIds }
             }
           })
 
           try {
-            const wave: Wave = {
-              waveNumber: args.waveNumber,
+            const epic: Epic = {
+              epicNumber: args.epicNumber,
               tasks: args.taskIds,
               status: "pending"
             }
 
             // Update coordinator max parallel if specified
             const maxParallel = args.maxParallel || 3
-            const customCoordinator = new WaveCoordinator(executor, maxParallel, client)
+            const customCoordinator = new EpicCoordinator(executor, maxParallel, client)
 
-            const result = await customCoordinator.executeWave(
-              wave,
+            const result = await customCoordinator.executeEpic(
+              epic,
               args.featureDir,
               ctx.sessionID
             )
 
             // Format results summary
-            const summaryLines = [`Wave ${args.waveNumber} Results:`]
+            const summaryLines = [`Epic ${args.epicNumber} Results:`]
             for (const [taskId, taskResult] of result.results) {
               const status = taskResult.status === "complete" ? "✅" : 
                              taskResult.status === "max_iterations" ? "⚠️" : "❌"
@@ -163,12 +163,12 @@ export const RalphWiggumPlugin: Plugin = async ({ client, $, directory }) => {
 
             const allComplete = result.allComplete
             summaryLines.push("")
-            summaryLines.push(allComplete ? "✅ All tasks in wave completed successfully!" : "⚠️ Some tasks need attention.")
+            summaryLines.push(allComplete ? "✅ All tasks in epic completed successfully!" : "⚠️ Some tasks need attention.")
 
             return summaryLines.join("\n")
           } catch (error) {
             const errorMessage = error instanceof Error ? error.message : String(error)
-            return `❌ Wave execution failed: ${errorMessage}`
+            return `❌ Epic execution failed: ${errorMessage}`
           }
         }
       }),

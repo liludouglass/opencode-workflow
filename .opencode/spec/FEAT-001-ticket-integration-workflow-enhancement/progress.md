@@ -80,3 +80,32 @@ If `max_iterations_per_task` (default: 10) is reached without `<complete/>`:
 ---
 
 <!-- Log continues below -->
+
+## 2026-01-07 15:30 - TASK-003 - Iteration 1
+Agent: @implementer
+Action: Removed non-existent tasks-creator.md reference from install.sh AGENTS array
+Files:
+  - install.sh (modified) - removed line 52 with tasks-creator reference
+Tests: Shell syntax validation passing, install script dry-run successful
+Commit: 8e5871d
+Status: <complete/>
+
+## 2026-01-07 17:48 - TASK-001 - Iteration 1
+Agent: @implementer
+Action: Created wf-context-recitation skill for project memory awareness
+Files:
+  - skill/wf-context-recitation/SKILL.md (created) - context recitation workflow skill
+Tests: No tests required for markdown skill file
+Commit: 8e5871d
+Status: <complete/>
+
+## 2026-01-07 17:49 - TASK-004 - Iteration 1
+Agent: @implementer
+Action: Renamed wave-coordinator.ts to epic-coordinator.ts and updated all references from "wave" to "epic"
+Files:
+  - plugin/ralph-wiggum/epic-coordinator.ts (created) - renamed from wave-coordinator.ts with all "wave" → "epic" changes
+  - plugin/ralph-wiggum/wave-coordinator.ts (deleted)
+  - plugin/ralph-wiggum/index.ts (modified) - updated imports and all references from Wave/WaveCoordinator to Epic/EpicCoordinator
+Tests: No test files exist for this module, syntax validation passed
+Commit: uncommitted
+Status: <complete/>
