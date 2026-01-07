@@ -30,6 +30,60 @@ You receive:
   - Spec depth required (L2/L3/L4)
   - Research findings and constraints
 
+## Master Spec Integration
+
+Before writing the specification, perform master spec integration:
+
+### Step 0: Check Master Spec
+
+1. **Find master specs**:
+   ```bash
+   ls .opencode/master-spec*.md 2>/dev/null || ls master-spec*.md 2>/dev/null
+   ```
+
+2. **If master spec exists**:
+   - Read sections identified in approach.md as "In Scope"
+   - Extract ALL requirements from those sections
+   - These requirements MUST appear in spec.md
+
+3. **Create Master Spec Coverage Table in spec.md**:
+   Use the template already in spec.md:
+   - Fill "Sections Implemented" with in-scope sections
+   - Fill "Sections Deferred" with out-of-scope sections
+
+### Step 0.5: Create Deferred Tickets
+
+For each item in "Sections Deferred":
+
+1. **Create a deferred ticket**:
+   ```bash
+   tk create "[Section Description]" \
+     --type deferred \
+     --dir .opencode/spec/FEAT-XXX/tickets
+   ```
+
+2. **Update the ticket file** to add custom fields:
+   ```yaml
+   deferred-from: [current-feature-id]
+   target-after: [target-feature if known, else "unspecified"]
+   reason: "[reason from approach.md]"
+   spec-section: "[master spec section number]"
+   ```
+
+3. **Update the Sections Deferred table** with the ticket ID in the "Ticket" column
+
+### Step 0.6: Update Master Spec Coverage
+
+After creating spec.md:
+
+1. **Read** `.opencode/memory/master-spec-coverage.md`
+2. **Add/update rows** for each section:
+   - Implemented sections: Status = ⏳ IN_PROGRESS, Feature = FEAT-XXX
+   - Deferred sections: Status = ⏳ DEFERRED, Feature = (ticket ID)
+3. **Update summary counts**:
+   - Recalculate Covered, Deferred, Partial percentages
+4. **Write back** the updated file with new timestamp
+
 # Depth Levels
 
 Write specifications at the depth level specified in approach.md:

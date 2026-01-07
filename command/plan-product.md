@@ -13,6 +13,7 @@ Create foundational product documentation and scaffold your project from product
 - **Tech Stack**: Technology choices and rationale
 - **Project Scaffold**: From curated production-ready templates
 - **Stack Skills**: Framework-specific coding standards
+- **Memory Structure**: Project context and coverage tracking files
 
 ## Usage
 
@@ -41,10 +42,18 @@ Create foundational product documentation and scaffold your project from product
 
 4. **Configure OpenCode**
    - Creates `.opencode/product/` with mission, roadmap, tech-stack
+   - Creates `.opencode/memory/` structure:
+     - `project.md` - Project context summary
+     - `master-spec-coverage.md` - Initialized empty
+     - `decisions.md` - Architecture decisions
    - Loads relevant skills to `.opencode/standards/`
-   - Sets up memory system
 
-5. **Ready to Build**
+5. **Master Spec Creation (Optional)**
+   - If user has requirements document, offer to create `master-spec.md`
+   - If multiple domains (UI, API), create `master-spec-ui.md`, `master-spec-api.md`
+   - Initialize master-spec-coverage.md with section list
+
+6. **Ready to Build**
    - Project is scaffolded and configured
    - Stack-specific patterns loaded
    - Full spec-driven workflow available
@@ -93,8 +102,8 @@ $ARGUMENTS
 5. Upon confirmation:
    - Scaffold from selected template (CLI/Copier/Clone)
    - Create `.opencode/product/` with mission.md, roadmap.md, tech-stack.md
+   - Create `.opencode/memory/` structure with project.md, master-spec-coverage.md, decisions.md
    - Copy relevant skills to `.opencode/standards/`
-   - Create `.opencode/memory/` structure
 6. Provide summary of what was created and next steps
 
 **Success Criteria**:

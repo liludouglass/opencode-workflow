@@ -51,6 +51,70 @@ You receive:
 5. **Identify gaps** - requirements without tasks
 6. **Identify redundancies** - overlapping task scopes
 
+## Master Spec Coverage Verification
+
+In addition to verifying tasks cover the feature spec, verify master spec coverage:
+
+### Step: Read Master Spec Claims
+
+1. Read spec.md "Master Spec Coverage" section
+2. Extract all sections marked as "Implemented" (Fully Covered = YES)
+3. For each section, identify the requirements it contains
+
+### Step: Verify Each Requirement Has a Ticket
+
+For each master spec requirement claimed as implemented:
+
+1. Search tickets for matching acceptance criteria:
+   ```bash
+   tk query '.["acceptance-criteria"]' --dir .opencode/spec/FEAT-XXX/tickets | grep -i "[keyword]"
+   ```
+
+2. Or check spec-section field:
+   ```bash
+   tk query '.["spec-section"] == "X.X"' --dir .opencode/spec/FEAT-XXX/tickets
+   ```
+
+3. If requirement not covered by any ticket, flag as **CRITICAL GAP**
+
+### Step: Verify Deferred Items Are Tracked
+
+For each section marked "Deferred" in spec.md:
+
+1. Verify a deferred ticket exists:
+   ```bash
+   tk query '.type == "deferred" and .["spec-section"] == "X.X"' --dir .opencode/spec/FEAT-XXX/tickets
+   ```
+
+2. If not found, flag as **TRACKING GAP**
+
+### Output: Master Spec Coverage Audit
+
+Add to audit report:
+
+```markdown
+## Master Spec Coverage Audit
+
+### Requirements Coverage
+| Master Spec Requirement | Ticket | Status |
+|-------------------------|--------|--------|
+| X.X.1 [description] | task-001 | ✅ COVERED |
+| X.X.2 [description] | task-002 | ✅ COVERED |
+| X.Y.1 [description] | (none) | ❌ **GAP** |
+
+### Deferred Items Tracking
+| Deferred Section | Ticket | Status |
+|------------------|--------|--------|
+| X.Z [description] | deferred-001 | ✅ TRACKED |
+| X.W [description] | (none) | ❌ **NOT TRACKED** |
+
+### Summary
+- Requirements covered: X/Y (Z%)
+- Deferred items tracked: A/B (C%)
+- **CRITICAL GAPS**: [count]
+- **TRACKING GAPS**: [count]
+```
+
 # Output Format
 
 Generate a coverage report:
@@ -118,6 +182,8 @@ Generate a coverage report:
 - Critical spec sections without tasks
 - More than 10% of requirements uncovered
 - Major unresolved redundancies
+- Any master spec requirement lacks a ticket (CRITICAL GAP)
+- Any deferred section lacks a deferred ticket (TRACKING GAP)
 
 # Severity Classification
 

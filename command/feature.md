@@ -33,12 +33,17 @@ When invoked, this command:
 ### Full Workflow Phases
 
 ```
-Phase 1: SHAPING      → @shaper           → HUMAN GATE (approve approach.md)
-Phase 2: SPECIFICATION → @spec-writer     → HUMAN GATE (approve spec.md)
-Phase 3: DECOMPOSITION → @decomposer      → AUTO (validation only)
-Phase 4: IMPLEMENTATION → Ralph loops      → AUTO (per-task verification)
-Phase 5: INTEGRATION   → @integrator      → AUTO (loops back on failure)
-Phase 6: COMPLETION    → @finalizer       → HUMAN GATE (if manual_review flag)
+Phase 0: SETUP         → @coordination-files  → AUTO (create work folder)
+Phase 1: SHAPING       → @shaper              → HUMAN GATE (approve approach.md)
+                         + checks master spec if exists
+Phase 2: SPECIFICATION → @spec-writer         → HUMAN GATE (approve spec.md)
+                         + creates deferred tickets
+                         + updates master-spec-coverage.md
+Phase 3: DECOMPOSITION → @decomposer          → AUTO (creates tickets)
+Phase 4: IMPLEMENTATION → Ralph loops         → AUTO (uses tk start/close)
+Phase 5: INTEGRATION   → @integrator          → AUTO (verifies via tk queries)
+                         + checks deferred items
+Phase 6: COMPLETION    → @finalizer           → HUMAN GATE (optional)
 ```
 
 ### Phase Details
@@ -47,7 +52,7 @@ Phase 6: COMPLETION    → @finalizer       → HUMAN GATE (if manual_review fla
 |-------|-------|--------|------|
 | 1. Shaping | @shaper | approach.md | Human approval required |
 | 2. Specification | @spec-writer, @spec-auditor, @feasibility-checker | spec.md, acceptance.md, audit-report.md | Human approval required |
-| 3. Decomposition | @decomposer, @coverage-auditor, @dependency-validator | tasks.md with waves | Automated validation |
+| 3. Decomposition | @decomposer, @coverage-auditor, @dependency-validator | tickets/ with dependencies | Automated validation |
 | 4. Implementation | @context-manager, @implementer (Ralph loops) | Code commits, progress.md | Automated per-task |
 | 5. Integration | @integrator, @spec-compliance, @regression-detector | integration-report.md | Automated (loops on failure) |
 | 6. Completion | @finalizer | summary.md | Human review (optional) |
@@ -100,19 +105,20 @@ Starts: Phase 1 with @shaper
 After completion, the work folder contains:
 
 ```
-.work/features/FEAT-001-user-auth-oauth2/
-├── approach.md            # Phase 1 - Approved direction
-├── spec.md                # Phase 2 - Full specification
+.opencode/spec/FEAT-001-user-auth-oauth2/
+├── approach.md            # Phase 1 - Approved direction (with master spec sections)
+├── spec.md                # Phase 2 - Full specification (with coverage table)
 ├── acceptance.md          # Phase 2 - Checkable criteria
 ├── audit-report.md        # Phase 2 - Verification results
-├── tasks.md               # Phase 3 - Task breakdown with waves
+├── tickets/               # Phase 3 - Individual ticket files
+│   ├── EPIC-001.md        # Epic ticket for the feature
+│   ├── TASK-001.md        # Task tickets
+│   ├── TASK-002.md
+│   └── DEFERRED-001.md    # Deferred items (if any)
 ├── progress.md            # Phase 4 - Append-only Ralph log
 ├── integration-report.md  # Phase 5 - Integration results
 ├── summary.md             # Phase 6 - Final summary
 └── context/               # Auto-generated context bundles
-    ├── summary.md
-    ├── task-001-context.md
-    └── task-002-context.md
 ```
 
 ## Related Commands
@@ -127,5 +133,6 @@ After completion, the work folder contains:
 - `.work/` folder structure must exist (created automatically if missing)
 - Templates in `.work/templates/` (created automatically if missing)
 - `config.yaml` with workflow settings
+- **Ticket CLI** installed (`brew install wedow/tools/ticket`) - see `docs/prerequisites.md`
 
 Feature request: $ARGUMENTS

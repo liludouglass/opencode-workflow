@@ -24,22 +24,22 @@ Use a single `bash` command with `mkdir -p`. The folders depend on the profile:
 
 **web** (default):
 ```bash
-mkdir -p .opencode/product .opencode/specs .opencode/memory .opencode/standards/global .opencode/standards/backend .opencode/standards/frontend .opencode/standards/testing
+mkdir -p .opencode/product .opencode/spec .opencode/memory .opencode/standards/global .opencode/standards/backend .opencode/standards/frontend .opencode/standards/testing
 ```
 
 **mobile**:
 ```bash
-mkdir -p .opencode/product .opencode/specs .opencode/memory .opencode/standards/global .opencode/standards/mobile .opencode/standards/backend .opencode/standards/testing
+mkdir -p .opencode/product .opencode/spec .opencode/memory .opencode/standards/global .opencode/standards/mobile .opencode/standards/backend .opencode/standards/testing
 ```
 
 **api**:
 ```bash
-mkdir -p .opencode/product .opencode/specs .opencode/memory .opencode/standards/global .opencode/standards/backend .opencode/standards/testing
+mkdir -p .opencode/product .opencode/spec .opencode/memory .opencode/standards/global .opencode/standards/backend .opencode/standards/testing
 ```
 
 **cli**:
 ```bash
-mkdir -p .opencode/product .opencode/specs .opencode/memory .opencode/standards/global .opencode/standards/cli .opencode/standards/testing
+mkdir -p .opencode/product .opencode/spec .opencode/memory .opencode/standards/global .opencode/standards/cli .opencode/standards/testing
 ```
 
 ### Step 2: Create Skeleton Files
@@ -188,6 +188,51 @@ Architectural and design decisions made during development.
 -->
 ```
 
+**.opencode/memory/master-spec-coverage.md**:
+```markdown
+# Master Spec Coverage
+
+## Source: master-spec.md
+Last Updated: ${TIMESTAMP} by ${AGENT}
+
+| Section | Description | Status | Feature | Notes |
+|---------|-------------|--------|---------|-------|
+<!-- Rows added automatically by @spec-writer -->
+
+## Summary
+- **Covered**: 0/0 (0%)
+- **Deferred**: 0 sections
+- **Partial**: 0 sections
+
+## Legend
+- ✅ DONE - Fully implemented
+- ⏳ DEFERRED - Tracked for later implementation
+- ⚠️ PARTIAL - Partially implemented
+- ❌ MISSING - Not yet addressed
+```
+
+**.opencode/memory/project.md**:
+```markdown
+# Project Context
+
+## Summary
+<!-- One paragraph project summary -->
+
+## Active Work
+<!-- Current feature/bug being worked on -->
+
+## Master Specifications
+<!-- List of master spec files -->
+| File | Description | Sections |
+|------|-------------|----------|
+
+## Tech Stack Summary
+<!-- Key technology choices -->
+
+## Key Constraints
+<!-- Important limitations to remember -->
+```
+
 **.opencode/memory/patterns.md**:
 ```markdown
 # Patterns
@@ -334,12 +379,14 @@ Created .opencode/ structure (profile: {profile}):
     roadmap.md
     tech-stack.md
   
-  specs/                    (empty - created per-feature)
+  spec/                     (empty - created per-feature)
   
   memory/
     decisions.md
     patterns.md
     learnings.md
+    master-spec-coverage.md
+    project.md
   
   standards/
     global/conventions.md

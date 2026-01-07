@@ -87,6 +87,67 @@ If performance requirements exist in spec:
 3. **Verify under load** (if applicable)
 4. **Compare against benchmarks**
 
+### Step 5: Epic Completion Verification
+
+Verify all tasks in the epic are complete using Ticket CLI:
+
+1. **Query incomplete tasks**:
+   ```bash
+   tk query '.parent == "[epic-id]" and .type == "task" and .status != "closed"' --dir .opencode/spec/FEAT-XXX/tickets
+   ```
+
+2. **If any incomplete**:
+   - List all incomplete tasks with their IDs and descriptions
+   - FAIL integration - cannot proceed with incomplete tasks
+   - Return to Phase 4 with list of remaining tasks
+
+3. **If all complete**:
+   - Log: "All [N] tasks in epic completed"
+   - Proceed to next step
+
+### Step 6: Deferred Items Check
+
+Check for deferred items that target this feature:
+
+1. **Query deferred items targeting this feature**:
+   ```bash
+   tk query '.type == "deferred" and .["target-after"] == "[current-feature]"' --dir .opencode/spec/FEAT-XXX/tickets
+   ```
+
+2. **For each deferred item found**:
+   - Check if it was addressed (converted to task and closed)
+   - Check if it was re-deferred with a new target
+   - If still open with this target: FLAG for attention
+
+3. **Alert if items remain**:
+   ```markdown
+   ## ⚠️ Deferred Items Due
+   
+   The following deferred items target this feature but are not addressed:
+   
+   | ID | Item | Action Required |
+   |----|------|-----------------|
+   | deferred-001 | Session Selector | Implement or re-defer |
+   
+   **Decision Required**: Address these items before completing integration.
+   ```
+
+### Step 7: Update Master Spec Coverage
+
+After all checks pass, update coverage tracking:
+
+1. **Read** `.opencode/memory/master-spec-coverage.md`
+
+2. **Update status** for sections implemented by this feature:
+   - Find rows where Feature = current feature ID
+   - Change Status from ⏳ IN_PROGRESS to ✅ DONE
+
+3. **Update summary counts**:
+   - Recalculate Covered percentage
+   - Update timestamp and agent name
+
+4. **Write back** the updated file
+
 ## Parallel Verification
 
 Invoke these verification agents in parallel:
@@ -258,6 +319,8 @@ Emit `<complete/>` when ALL of these are true:
 5. @regression-detector finds no regressions
 6. No critical or high-priority issues remain open
 7. @security-auditor finds no critical vulnerabilities (if run)
+8. All tasks in epic must be closed (verified via `tk query`)
+9. Deferred items targeting this feature must be addressed
 
 ## Loop Back Conditions
 
@@ -267,6 +330,8 @@ Return to Phase 4 (do NOT emit `<complete/>`) when:
 2. Integration tests fail
 3. Verification agents reject the implementation
 4. Critical issues are found
+5. Return to Phase 4 if any epic tasks are not closed
+6. Return to Phase 4 if deferred items need implementation
 
 When looping back:
 1. Update tasks.md with new fix tasks

@@ -118,6 +118,33 @@ After user confirms template:
 
 Create three documents in `.opencode/product/`:
 
+### Phase 4.5: Create Memory Structure
+
+Create the memory layer in `.opencode/memory/`:
+
+1. **project.md** - Summarize from mission.md and tech-stack.md:
+   - Summary (from vision and goals)
+   - Active Work: "None - project just initialized"
+   - Master Specifications table
+   - Tech Stack Summary
+   - Key Constraints
+
+2. **master-spec-coverage.md** - Initialize empty using template
+
+3. **decisions.md** - Use existing template from /setup
+
+### Phase 4.6: Master Spec Assistance (Optional)
+
+If user has existing requirements or wants to create a master spec:
+
+1. Ask: "Do you have a requirements document or want to create a master spec?"
+2. If yes:
+   - Help structure into `master-spec.md`
+   - For multiple domains: `master-spec-ui.md`, `master-spec-api.md`
+   - Initialize `master-spec-coverage.md` with sections:
+     - Parse master spec for numbered sections
+     - Add each as a row with Status = ❌ MISSING
+
 #### mission.md Structure
 
 ```markdown

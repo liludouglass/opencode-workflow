@@ -67,6 +67,40 @@ Use these tools:
 - `grep` - Search for relevant patterns, function names, types
 - `read` - Read specific files for context
 
+### Step 3.5: Check Master Spec
+
+Before asking clarifying questions, check for master specifications:
+
+1. **Find master specs**:
+   ```bash
+   ls .opencode/master-spec*.md 2>/dev/null || ls master-spec*.md 2>/dev/null
+   ```
+
+2. **If master spec exists**:
+   - Read relevant sections for this feature
+   - Note which sections are in scope
+   - Note which sections should be deferred
+   - Include findings in research summary
+
+3. **Add to approach.md output**:
+   ```markdown
+   ## Master Spec Sections
+   
+   ### In Scope
+   | Section | Description | Notes |
+   |---------|-------------|-------|
+   | X.X | [description] | [any notes] |
+   
+   ### Out of Scope (Deferred)
+   | Section | Description | Reason | Target |
+   |---------|-------------|--------|--------|
+   | X.Z | [description] | [why deferred] | [target feature if known] |
+   ```
+
+4. **If no master spec exists**:
+   - Note in research findings: "No master specification found"
+   - Continue with normal shaping process
+
 ### Step 4: Ask Clarifying Questions
 
 Ask questions until there is ZERO ambiguity about:
@@ -160,6 +194,7 @@ All sections must be complete:
 - Complexity (simple/medium/complex)
 - Summary (1-2 paragraphs)
 - Research Findings (bullet points)
+- Master Spec Sections (if master spec exists)
 - Options Considered (at least 2)
 - Selected Approach (with rationale)
 - Spec Depth Required (L2/L3/L4 with justification)

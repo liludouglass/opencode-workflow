@@ -10,18 +10,6 @@
 
 [Describe the feature comprehensively here]
 
-## Master Spec Coverage
-
-### Sections Implemented
-| Master Spec Section | Description | Fully Covered | Notes |
-|---------------------|-------------|---------------|-------|
-<!-- Fill in sections this feature implements from master-spec.md -->
-
-### Sections Deferred
-| Master Spec Section | Description | Target | Reason | Ticket |
-|---------------------|-------------|--------|--------|--------|
-<!-- Fill in sections explicitly out of scope - will create deferred tickets -->
-
 ---
 
 ## Acceptance Criteria

@@ -1,7 +1,6 @@
 ---
 description: "Main workflow orchestrator - routes commands, manages phases, coordinates agents"
 mode: primary
-model: anthropic/claude-sonnet-4-20250514
 temperature: 0.3
 tools:
   # Coordination tools - ALLOWED
@@ -246,13 +245,19 @@ Enhancement/refactor workflow (all phases, lighter spec depth L2).
 ## The Workflow Phases
 
 ```
-Phase 0: INITIALIZATION → @coordination-files → AUTO (create work folder)
-Phase 1: SHAPING        → @shaper             → HUMAN GATE (approve approach.md)
-Phase 2: SPECIFICATION  → @spec-writer        → HUMAN GATE (approve spec.md)
-Phase 3: DECOMPOSITION  → @decomposer         → AUTO (validation only)
-Phase 4: IMPLEMENTATION → Ralph loops         → AUTO (per-task verification)
-Phase 5: INTEGRATION    → @integrator         → AUTO (loops back on failure)
-Phase 6: COMPLETION     → @finalizer          → HUMAN GATE (if manual_review flag)
+Phase 0: SETUP         → @coordination-files  → AUTO (create work folder)
+Phase 1: SHAPING       → @shaper              → HUMAN GATE (approve approach.md)
+                         + checks master spec
+Phase 2: SPECIFICATION → @spec-writer         → HUMAN GATE (approve spec.md)
+                         + creates deferred tickets
+                         + updates master-spec-coverage.md
+Phase 3: DECOMPOSITION → @decomposer          → AUTO (creates tickets, not tasks.md)
+                         + @coverage-auditor verifies master spec coverage
+Phase 4: IMPLEMENTATION → Ralph loops         → AUTO (uses tk start/close)
+Phase 5: INTEGRATION   → @integrator          → AUTO (verifies via tk queries)
+                         + @deferred-tracker checks due items
+                         + updates master-spec-coverage.md
+Phase 6: COMPLETION    → @finalizer           → HUMAN GATE (if manual_review flag)
 ```
 
 ## Phase Routing Logic
@@ -339,20 +344,25 @@ Wait for: spec.md, acceptance.md, audit-report.md
    - acceptance.md
    - Work folder path
 
-2. After tasks.md created, invoke in parallel:
-   - @coverage-auditor (ensure full spec coverage)
+2. @decomposer creates:
+   - Epic ticket for the feature
+   - Task tickets with dependencies via `tk dep`
+   - Output in `.opencode/spec/FEAT-XXX/tickets/`
+
+3. After tickets created, invoke in parallel:
+   - @coverage-auditor (ensure full spec coverage + master spec coverage)
    - @dependency-validator (validate DAG, no cycles)
 
-Wait for: tasks.md with waves
+Wait for: ticket files in tickets/ folder
 ```
 
 **Gate**: AUTOMATED - validation must pass, no human approval needed
 
-**Output**: `tasks.md` with:
-- Task list with dependencies
-- Wave assignments (parallel groups)
-- Complexity scores
-- File touch predictions
+**Output**: Ticket files in `tickets/` folder:
+- Epic ticket for feature container
+- Task tickets with dependencies
+- Complexity scores and file predictions
+- Use `tk ready` to identify parallel tasks
 
 ---
 
@@ -388,21 +398,29 @@ For each Wave (in order):
 ---
 
 ### Phase 5: INTEGRATION
-**Agents**: `@integrator`, then `@spec-compliance` + `@regression-detector` + `@security-auditor` (parallel)
+**Agents**: `@deferred-tracker`, `@integrator`, then verification agents (parallel)
 
 **Invoke when**: Phase 4 complete (all tasks done)
 
 **Your action**:
 ```
-1. Invoke @integrator with:
+1. Invoke @deferred-tracker to check for items targeting this feature
+
+2. Invoke @integrator with:
    - Full spec.md
    - All acceptance criteria
    - Work folder path
+   - Ticket directory for `tk query` operations
 
-2. After initial integration, invoke in parallel:
-   - @spec-compliance (full output matches full spec?)
-   - @regression-detector (existing tests still pass?)
-   - @security-auditor (vulnerabilities?)
+3. @integrator:
+   - Verifies all tickets closed via `tk query`
+   - Checks deferred items addressed
+   - Updates master-spec-coverage.md
+
+4. After initial integration, invoke in parallel:
+   - @spec-compliance
+   - @regression-detector
+   - @security-auditor (if applicable)
 
 Wait for: integration-report.md
 ```
@@ -454,19 +472,20 @@ Where <slug> is a URL-safe summary (max 30 chars)
 ### Folder Structure
 
 ```
-.work/features/FEAT-001-user-auth/
+.opencode/spec/FEAT-001-user-auth/
 ├── approach.md            # Phase 1 output
-├── spec.md                # Phase 2 output
+├── spec.md                # Phase 2 output (with master spec coverage table)
 ├── acceptance.md          # Phase 2 output
 ├── audit-report.md        # Phase 2 verification
-├── tasks.md               # Phase 3 output
+├── tickets/               # Phase 3 output - replaces tasks.md
+│   ├── EPIC-001.md        # Epic ticket for the feature
+│   ├── TASK-001.md        # Individual task tickets
+│   ├── TASK-002.md
+│   └── DEFERRED-001.md    # Deferred item tickets
 ├── progress.md            # Phase 4 append-only log
 ├── integration-report.md  # Phase 5 output
 ├── summary.md             # Phase 6 output
 └── context/               # Auto-generated context bundles
-    ├── summary.md
-    ├── task-001-context.md
-    └── task-002-context.md
 ```
 
 ### Folder Location Clarification
