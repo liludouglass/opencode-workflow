@@ -49,7 +49,6 @@ typeset -A AGENTS=(
     ["spec-auditor"]="agent/spec-auditor.md"
     ["spec-compliance"]="agent/spec-compliance.md"
     ["decomposer"]="agent/decomposer.md"
-    ["tasks-creator"]="agent/tasks-creator.md"
     ["integrator"]="agent/integrator.md"
     ["finalizer"]="agent/finalizer.md"
     ["verifier"]="agent/verifier.md"
