@@ -11,11 +11,11 @@ export type {
   TaskContext
 } from "./task-executor"
 
-// Wave Coordinator types
+// Epic Coordinator types
 export type {
-  Wave,
-  WaveResult
-} from "./wave-coordinator"
+  Epic,
+  EpicResult
+} from "./epic-coordinator"
 
 // CI Enforcer types
 export type {
@@ -46,8 +46,8 @@ export interface TaskProgress {
   errorMessage?: string
 }
 
-export interface WaveProgress {
-  waveNumber: number
+export interface EpicProgress {
+  epicNumber: number
   totalTasks: number
   completedTasks: number
   failedTasks: number

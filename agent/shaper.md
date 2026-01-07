@@ -208,9 +208,9 @@ Based on complexity, recommend the appropriate spec depth:
 
 Based on request type, create the appropriate folder:
 
-- **Feature**: `.work/features/FEAT-XXX-[slug]/`
-- **Bug**: `.work/bugs/BUG-XXX-[slug]/`
-- **Improve**: `.work/features/FEAT-XXX-[slug]/` (treated as feature)
+- **Feature**: `.opencode/features/FEAT-XXX-[slug]/`
+- **Bug**: `.opencode/bugs/BUG-XXX-[slug]/`
+- **Improve**: `.opencode/features/FEAT-XXX-[slug]/` (treated as feature)
 
 Where:
 - `XXX` is the next available number (check existing folders)
@@ -264,8 +264,8 @@ Signal completion with:
 ```
 <shaping_complete/>
 
-Work folder created: .work/[features|bugs]/[FOLDER_NAME]/
-Approach document: .work/[features|bugs]/[FOLDER_NAME]/approach.md
+Work folder created: .opencode/[features|bugs]/[FOLDER_NAME]/
+Approach document: .opencode/[features|bugs]/[FOLDER_NAME]/approach.md
 
 **HUMAN GATE**: Please review approach.md and approve to proceed to Phase 2 (Specification).
 ```
@@ -273,7 +273,7 @@ Approach document: .work/[features|bugs]/[FOLDER_NAME]/approach.md
 ## Skip Conditions
 
 For bugs with **clear reproduction steps**:
-1. Create simplified work folder in `.work/bugs/BUG-XXX-[slug]/`
+1. Create simplified work folder in `.opencode/bugs/BUG-XXX-[slug]/`
 2. Create minimal approach.md with:
    - Request Type: bug
    - Complexity: simple
@@ -327,7 +327,7 @@ User: "Add user authentication"
 
 7. Spec depth: L3 (API contracts, token schemas needed)
 
-8. Create: .work/features/FEAT-001-user-auth/approach.md
+8. Create: .opencode/features/FEAT-001-user-auth/approach.md
 
 9. Signal: <shaping_complete/>
 ```

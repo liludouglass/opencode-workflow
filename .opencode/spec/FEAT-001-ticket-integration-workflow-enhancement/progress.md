@@ -107,5 +107,15 @@ Files:
   - plugin/ralph-wiggum/wave-coordinator.ts (deleted)
   - plugin/ralph-wiggum/index.ts (modified) - updated imports and all references from Wave/WaveCoordinator to Epic/EpicCoordinator
 Tests: No test files exist for this module, syntax validation passed
+Commit: b4afef9
+Status: <complete/>
+
+## 2026-01-07 18:00 - TASK-005 - Iteration 1
+Agent: @implementer
+Action: Updated all .work/ path references to .opencode/ in agent files for project-level work folders
+Files:
+  - ~/.config/opencode/agent/shaper.md (modified) - updated work folder paths from .work/ to .opencode/ for features/bugs
+  - ~/.config/opencode/agent/context-manager.md (modified) - updated work folder paths from .work/ to .opencode/ for features/bugs and spec folders
+Tests: No tests required for markdown configuration files
 Commit: uncommitted
 Status: <complete/>

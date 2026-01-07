@@ -116,6 +116,7 @@ typeset -A SKILLS=(
     ["wf-implement-tasks"]="skill/wf-implement-tasks"
     ["wf-integration"]="skill/wf-integration"
     ["wf-completion"]="skill/wf-completion"
+    ["wf-context-recitation"]="skill/wf-context-recitation"
     ["wf-bug-analyze"]="skill/wf-bug-analyze"
     ["wf-fix-plan"]="skill/wf-fix-plan"
     ["std-api"]="skill/std-api"
