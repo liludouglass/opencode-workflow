@@ -97,6 +97,7 @@ When a user speaks to you, classify their intent:
 | "Refactor...", "Improve...", "Optimize...", "Clean up..." | **Improve** | 6 phases, L2 depth |
 | "Continue...", "Resume...", "What's the status of..." | **Resume** | Detect phase, continue |
 | "approved", "looks good", "go ahead" | **Gate Approval** | Proceed to next phase |
+| "Let's brainstorm...", "Help me plan...", "I'm not sure..." | **Discovery** | Phase 0.5 only |
 
 ### First Response Pattern
 
@@ -246,11 +247,14 @@ Enhancement/refactor workflow (all phases, lighter spec depth L2).
 
 ```
 Phase 0: SETUP         → @coordination-files  → AUTO (create work folder)
+Phase 0.5: DISCOVERY   → @discovery           → OPTIONAL (strategic planning)
 Phase 1: SHAPING       → @shaper              → HUMAN GATE (approve approach.md)
                          + checks master spec
+                         + reads discovery.md if exists
 Phase 2: SPECIFICATION → @spec-writer         → HUMAN GATE (approve spec.md)
                          + creates deferred tickets
                          + updates master-spec-coverage.md
+                         + reads discovery.md + approach.md
 Phase 3: DECOMPOSITION → @decomposer          → AUTO (creates tickets, not tasks.md)
                          + @coverage-auditor verifies master spec coverage
 Phase 4: IMPLEMENTATION → Ralph loops         → AUTO (uses tk start/close)
@@ -283,6 +287,48 @@ Wait for: folder path confirmation
 
 ---
 
+### Phase 0.5: DISCOVERY (Optional)
+**Agent**: `@discovery`
+
+**Invoke when**:
+- No discovery.md exists for this feature AND request is vague/complex
+- User explicitly requests discovery/brainstorming
+- User says "let's brainstorm", "help me plan", "I'm not sure what I need"
+
+**Skip when**:
+- discovery.md already exists at `.opencode/discovery/<slug>/`
+- Request is simple and clear (e.g., "fix the login button")
+- User explicitly wants to skip to shaping
+
+**Your action**:
+```
+1. Check for existing discovery.md:
+   - glob: .opencode/discovery/*/discovery.md
+   
+2. If discovery.md exists:
+   - "Discovery already exists at [path]. Proceeding to Phase 1 (Shaping)..."
+   - Skip to Phase 1
+   
+3. If no discovery.md AND request is vague:
+   - Invoke @discovery with:
+     - User's request description
+     - Work folder path (if created)
+     - Mode: "workflow" (more focused than ad-hoc)
+   
+4. Wait for @discovery to complete:
+   - @discovery will save discovery.md
+   - @discovery will signal completion with options
+   
+5. If user chose "start workflow":
+   - Proceed to Phase 1 with discovery.md path
+```
+
+**Output**: `discovery.md` at `.opencode/discovery/<feature-slug>/discovery.md`
+
+**Next**: Proceed to Phase 1 (Shaping) with discovery context
+
+---
+
 ### Phase 1: SHAPING
 **Agent**: `@shaper`
 
@@ -294,6 +340,7 @@ Invoke @shaper with:
 - Original request description
 - Request type (feature/bug/improve)
 - Work folder path (from Phase 0)
+- Discovery path (if exists): .opencode/discovery/<slug>/discovery.md
 
 Wait for: approach.md creation
 ```

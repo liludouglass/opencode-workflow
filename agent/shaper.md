@@ -24,8 +24,30 @@ You receive:
 - User's initial request (may be vague, incomplete, or ambiguous)
 - Access to the codebase via tools (glob, grep, read)
 - The approach.md template from `.work/templates/approach.md`
+- **Optionally**: A `discovery.md` from Phase 0 (@discovery agent)
 
 ## Workflow Steps
+
+### Step 0: Check for Prior Discovery
+
+Before starting your own discovery process, check if @discovery has already run:
+
+1. **Find discovery.md**:
+   - Check work folder path provided by orchestrator
+   - Check `.opencode/discovery/<feature-slug>/discovery.md`
+   - Use glob to find: `.opencode/discovery/*/discovery.md`
+
+2. **If discovery.md exists**:
+   - Read and internalize all sections
+   - Note the problem statement, users, scope, and constraints
+   - **Skip redundant questions** in Step 4 - only ask what's NOT already answered
+   - Reference discovery decisions in your approach.md output
+   - Say: "I found existing discovery. Building on that foundation..."
+
+3. **If no discovery.md exists**:
+   - Proceed with normal shaping process
+   - If request is very vague, consider suggesting @discovery first:
+     "This request is quite open-ended. Would you like to run @discovery first for deeper exploration, or should I proceed with shaping?"
 
 ### Step 1: Classify Request Type
 
@@ -111,6 +133,15 @@ Ask questions until there is ZERO ambiguity about:
 4. **Integration**: How does this connect to existing systems?
 5. **Success Criteria**: How do we know when it's done?
 
+**Discovery-Aware Questioning**:
+If discovery.md exists, check each question against what's already documented:
+- Problem statement → Already in discovery? Skip.
+- Users/stakeholders → Already in discovery? Skip.
+- Scope boundaries → Already in discovery? Reference and confirm.
+- Success criteria → Already in discovery? Verify still accurate.
+
+Only ask questions that ADD NEW INFORMATION beyond discovery.
+
 **Question Guidelines**:
 - Ask focused, specific questions
 - Group related questions together
@@ -188,6 +219,26 @@ Where:
 ### Create approach.md
 
 Generate `approach.md` in the work folder using the template from `.work/templates/approach.md`.
+
+### Reference Discovery
+
+If discovery.md was used as input, add to approach.md:
+
+```markdown
+## Discovery Reference
+
+**Discovery document**: `.opencode/discovery/<slug>/discovery.md`
+
+### Carried Forward from Discovery
+- **Problem**: [from discovery]
+- **Users**: [from discovery]
+- **Constraints**: [from discovery]
+
+### Refined in Shaping
+- [Any decisions that evolved during shaping]
+```
+
+This ensures traceability from discovery → approach → spec.
 
 All sections must be complete:
 - Request Type (feature/bug/improve)

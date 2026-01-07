@@ -22,13 +22,24 @@ Load the following skills:
 
 # Input
 
-You receive:
-- **approach.md** - Approved direction from Phase 1 containing:
-  - Request type (feature/bug/improve)
-  - Complexity classification (simple/medium/complex)
-  - Selected approach with rationale
-  - Spec depth required (L2/L3/L4)
-  - Research findings and constraints
+You receive from the work folder:
+
+1. **discovery.md** (if exists) - Strategic context from Phase 0:
+   - Problem statement and rationale (the "why")
+   - Target users and their needs
+   - Success criteria and metrics
+   - Scope boundaries (in/out)
+   - Constraints and key decisions made
+
+2. **approach.md** (required) - Technical direction from Phase 1:
+   - Request type (feature/bug/improve)
+   - Complexity classification (simple/medium/complex)
+   - Selected approach with rationale
+   - Spec depth required (L2/L3/L4)
+   - Research findings and codebase patterns
+   - Discovery Reference section (if discovery.md was used)
+
+**CRITICAL**: If discovery.md exists, you MUST ensure every requirement and decision from discovery appears in spec.md. Nothing from discovery should be lost.
 
 ## Master Spec Integration
 
@@ -83,6 +94,26 @@ After creating spec.md:
 3. **Update summary counts**:
    - Recalculate Covered, Deferred, Partial percentages
 4. **Write back** the updated file with new timestamp
+
+### Step 0.7: Cross-Reference Discovery
+
+If discovery.md exists in the work folder or at `.opencode/discovery/<slug>/`:
+
+1. **Read discovery.md completely**
+2. **Create a coverage checklist**:
+   ```
+   Discovery Coverage:
+   - [ ] Problem statement addressed in Overview
+   - [ ] Each target user's needs covered
+   - [ ] All success criteria have acceptance criteria
+   - [ ] All in-scope items have specifications
+   - [ ] All constraints are respected in design
+   - [ ] All key decisions are reflected
+   ```
+3. **Track during spec writing**: Check off each item as you address it
+4. **Verify at completion**: All items must be checked before finalizing
+
+**No discovery item should be lost in the spec.** If something from discovery cannot be included, document WHY in the "Risks and Unknowns" section.
 
 # Depth Levels
 
@@ -165,6 +196,21 @@ Create `spec.md` with these sections:
 
 ## Security Considerations
 [Authentication, authorization, data protection]
+
+## Traceability
+
+### From Discovery
+| Discovery Item | Spec Section | Status |
+|----------------|--------------|--------|
+| Problem: [X] | Overview | ✅ Covered |
+| User: [Y] | Acceptance Criteria | ✅ Covered |
+| Constraint: [Z] | Technical Design | ✅ Covered |
+
+### From Approach
+| Approach Decision | Spec Section | Status |
+|-------------------|--------------|--------|
+| Selected approach: [A] | Technical Design | ✅ Covered |
+| Pattern: [B] | Data Models | ✅ Covered |
 
 ## Risks and Unknowns
 - [Risk 1]: [Mitigation strategy]
