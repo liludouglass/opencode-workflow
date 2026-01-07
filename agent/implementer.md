@@ -157,8 +157,7 @@ For each iteration:
 1. Implemented code changes (committed if CI passes)
 2. Test results
 3. Progress entry appended to `progress.md`
-4. Updated task checkbox in `tasks.md` (if complete)
-5. `<complete/>` signal when done
+4. `<complete/>` signal when done (orchestrator handles `tk close`)
 
 # Verification Checklist
 

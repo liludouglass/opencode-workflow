@@ -24,7 +24,7 @@ Run a Ralph Wiggum loop on a specific task. Each iteration uses fresh context an
 
 When invoked, this command:
 
-1. **Locates task** in active work folder's `tasks.md`
+1. **Locates task** via `tk show <task-id>`
 2. **Generates context bundle** via `@context-manager`
 3. **Runs `@implementer`** with clean slate
 4. **Monitors for `<complete/>`** signal
@@ -236,7 +236,7 @@ This prevents the degradation that occurs when agents run too long with accumula
 
 ## Prerequisites
 
-- Active work folder with `tasks.md`
+- Active work folder with tickets (managed via `tk` CLI)
 - Task must exist and not be completed
 - `.work/config.yaml` with Ralph settings
 

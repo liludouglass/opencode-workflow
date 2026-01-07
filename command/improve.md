@@ -124,7 +124,7 @@ Same structure as `/feature`:
 ├── spec.md                # L2 depth specification
 ├── acceptance.md          # Focused acceptance criteria
 ├── audit-report.md        # Verification results
-├── tasks.md               # Task breakdown
+├── tickets/               # Task tickets (via tk CLI)
 ├── progress.md            # Implementation log
 ├── integration-report.md  # Integration results
 └── summary.md             # Final summary

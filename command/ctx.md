@@ -11,7 +11,7 @@ Save and load project context snapshots for continuity across sessions.
 ### If action is "save":
 1. Read key project files:
    - `.opencode/spec.md` (if exists)
-   - `.opencode/tasks.md` (if exists)
+   - Query tickets via `tk query` (if tickets exist)
    - `.opencode/scratchpad.md` (if exists)
    - `README.md` or `package.json` or `pyproject.toml`
 
@@ -28,7 +28,7 @@ Generated: !`date +%Y-%m-%d %H:%M`
 
 ## Active Work
 
-[Extract from tasks.md - what's in progress]
+[Extract from `tk query '[.status == "in_progress"]'` - what's in progress]
 
 ## Key Decisions
 

@@ -11,33 +11,38 @@ Follow each of these phases and their individual workflows IN SEQUENCE:
 
 ## Multi-Phase Process
 
-### FIRST: Get tasks.md for this spec
+### FIRST: Get tickets for this spec
 
-IF you already know which spec we're working on and IF that spec folder has a `tasks.md` file, then use that and skip to the NEXT phase.
+IF you already know which spec we're working on, query its tickets using `tk ready` to see what's available for implementation, then skip to the NEXT phase.
 
-IF you don't already know which spec we're working on and IF that spec folder doesn't yet have a `tasks.md` THEN output the following request to the user:
+IF you don't already know which spec we're working on or IF no tickets exist yet, THEN output the following request to the user:
 
 ```
-Please point me to a spec's `tasks.md` that you want to orchestrate implementation for.
+Please point me to a spec that you want to orchestrate implementation for.
 
-If you don't have one yet, then run any of these commands first:
+If you don't have tickets yet, then run any of these commands first:
 /skill wf-initialize-spec
 /skill wf-write-spec
 /skill wf-create-tasks
+
+Once tickets are created, use `tk ready` to see available tickets.
 ```
 
 ### NEXT: Create orchestration.yml to serve as a roadmap for orchestration of task groups
 
 In this spec's folder, create this file: `.opencode/spec/[this-spec]/orchestration.yml`.
 
-Populate this file with with the names of each task group found in this spec's `tasks.md` and use this EXACT structure for the content of `orchestration.yml`:
+Run `tk ready` to get available tickets, then populate this file with ticket IDs grouped by their task group. Use this EXACT structure for the content of `orchestration.yml`:
 
 ```yaml
 task_groups:
   - name: [task-group-name]
+    tickets: [ticket-id-1, ticket-id-2]
   - name: [task-group-name]
+    tickets: [ticket-id-3]
   - name: [task-group-name]
-  # Repeat for each task group found in tasks.md
+    tickets: [ticket-id-4, ticket-id-5, ticket-id-6]
+  # Repeat for each task group returned by `tk ready`
 ```
 
 ### NEXT: Ask user to assign subagents to each task group
@@ -60,12 +65,15 @@ Using the user's responses, update `orchestration.yml` to specify those subagent
 ```yaml
 task_groups:
   - name: [task-group-name]
+    tickets: [ticket-id-1, ticket-id-2]
     subagent: [subagent-name]
   - name: [task-group-name]
+    tickets: [ticket-id-3]
     subagent: [subagent-name]
   - name: [task-group-name]
+    tickets: [ticket-id-4, ticket-id-5]
     subagent: [subagent-name]
-  # Repeat for each task group found in tasks.md
+  # Repeat for each task group returned by `tk ready`
 ```
 
 For example, after this step, the `orchestration.yml` file might look like this (exact names will vary):
@@ -73,10 +81,13 @@ For example, after this step, the `orchestration.yml` file might look like this 
 ```yaml
 task_groups:
   - name: authentication-system
+    tickets: [TK-001, TK-002]
     subagent: backend-specialist
   - name: user-dashboard
+    tickets: [TK-003, TK-004, TK-005]
     subagent: frontend-specialist
   - name: api-endpoints
+    tickets: [TK-006]
     subagent: backend-specialist
 ```
 
@@ -106,17 +117,19 @@ Using the user's responses, update `orchestration.yml` to specify those standard
 ```yaml
 task_groups:
   - name: [task-group-name]
+    tickets: [ticket-id-1, ticket-id-2]
     standards:
       - [users' 1st response for this task group]
       - [users' 2nd response for this task group]
       - [users' 3rd response for this task group]
       # Repeat for all standards that the user specified for this task group
   - name: [task-group-name]
+    tickets: [ticket-id-3]
     standards:
       - [users' 1st response for this task group]
       - [users' 2nd response for this task group]
       # Repeat for all standards that the user specified for this task group
-  # Repeat for each task group found in tasks.md
+  # Repeat for each task group returned by `tk ready`
 ```
 
 For example, after this step, the `orchestration.yml` file might look like this (exact names will vary):
@@ -124,14 +137,18 @@ For example, after this step, the `orchestration.yml` file might look like this 
 ```yaml
 task_groups:
   - name: authentication-system
+    tickets: [TK-001, TK-002]
     standards:
       - all
   - name: user-dashboard
+    tickets: [TK-003, TK-004, TK-005]
     standards:
       - global/*
       - frontend/*
   - name: task-group-with-no-standards
+    tickets: [TK-007]
   - name: api-endpoints
+    tickets: [TK-006]
     standards:
       - backend/*
       - global/*
@@ -141,15 +158,15 @@ Note: If subagents are enabled, the final `orchestration.yml` would include BOTH
 
 ### NEXT: Delegate task groups implementations to assigned subagents
 
-Loop through each task group in `.opencode/spec/[this-spec]/tasks.md` and delegate its implementation to the assigned subagent specified in `orchestration.yml`.
+Loop through each task group's tickets via `tk ready` and delegate implementation to the assigned subagent specified in `orchestration.yml`.
 
 For each delegation, provide the subagent with:
-- The task group (including the parent task and all sub-tasks)
+- The ticket IDs for this task group (from `orchestration.yml`)
 - The spec file: `.opencode/spec/[this-spec]/spec.md`
 - Instruct subagent to:
   - Load the implementation workflow: `/skill wf-implement-tasks`
   - Perform their implementation
-  - Check off the task and sub-task(s) in `.opencode/spec/[this-spec]/tasks.md`
+  - Close completed tickets using `tk close <id>`
 
 In addition to the above items, also instruct the subagent to closely adhere to the user's standards & preferences. To build the list of standards to give to the subagent, follow these instructions:
 
@@ -187,8 +204,8 @@ To delegate to a subagent in OpenCode, use the @mention syntax:
 
 **Task Group:** [task-group-name]
 
-**Tasks:**
-[Copy the task group content from tasks.md]
+**Tickets:** [ticket-id-1, ticket-id-2, ...]
+Use `tk show <id>` to view each ticket's details.
 
 **Spec:** Read `.opencode/spec/[this-spec]/spec.md`
 
@@ -197,7 +214,7 @@ To delegate to a subagent in OpenCode, use the @mention syntax:
 
 **Workflow:** Load `/skill wf-implement-tasks` for implementation guidance.
 
-**When complete:** Mark tasks as done in `.opencode/spec/[this-spec]/tasks.md`
+**When complete:** Close tickets using `tk close <id>` for each completed ticket.
 ```
 
 Provide all of the above to the subagent when delegating tasks for it to implement.
@@ -206,16 +223,17 @@ Provide all of the above to the subagent when delegating tasks for it to impleme
 
 After all subagents have completed their work:
 
-1. Review `.opencode/spec/[this-spec]/tasks.md` to verify all tasks are checked off
-2. Run any integration tests if applicable
-3. Report completion status to the user
+1. Run `tk query --status=closed` to verify all tickets have been closed
+2. Run `tk ready` to confirm no pending tickets remain
+3. Run any integration tests if applicable
+4. Report completion status to the user
 
 ```
 Implementation orchestration complete!
 
-✅ Task Group 1: [name] - Completed by @[subagent]
-✅ Task Group 2: [name] - Completed by @[subagent]
-✅ Task Group 3: [name] - Completed by @[subagent]
+✅ Task Group 1: [name] - Completed by @[subagent] (TK-001, TK-002 closed)
+✅ Task Group 2: [name] - Completed by @[subagent] (TK-003, TK-004, TK-005 closed)
+✅ Task Group 3: [name] - Completed by @[subagent] (TK-006 closed)
 
-All tasks have been implemented according to spec.
+All tickets have been implemented and closed according to spec.
 ```

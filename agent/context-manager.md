@@ -45,7 +45,7 @@ Locate all potential source files:
 Sources:
 - spec.md          → Full specification
 - acceptance.md    → Checkable criteria
-- tasks.md         → Task breakdown with status
+- tickets/         → Task tickets with status (via tk CLI)
 - progress.md      → Ralph loop progress log
 - Code files       → Files being modified
 ```
@@ -66,11 +66,11 @@ For each source file, extract ONLY what's relevant to the current task.
 - Exclude criteria for other tasks
 - Exclude already completed criteria (just note "X criteria already met")
 
-#### tasks.md Extraction Rules
-- Include full details for current task
-- Include brief status of blocking tasks
+#### Ticket Extraction Rules
+- Use `tk show <task-id>` to get full details for current task
+- Use `tk query --blocks <task-id>` to get brief status of blocking tasks
 - For completed tasks: include only task ID and "completed" status
-- Exclude pending tasks unrelated to current task
+- Use `tk query --status pending` to filter out unrelated pending tasks
 
 #### progress.md Extraction Rules
 - Include last N entries (default: 10, configurable via config.yaml)
@@ -96,7 +96,7 @@ Token Estimate: ~XXXX tokens
 ## Task Details
 
 **Task ID**: TASK-003
-**Description**: [Task description from tasks.md]
+**Description**: [Task description from ticket file via `tk show <task-id>`]
 **Complexity**: [1-5]
 **Dependencies**: [List or "none"]
 **Files to Modify**: [List of files]
@@ -284,7 +284,7 @@ Emit completion when:
 | Failure | Action |
 |---------|--------|
 | Work folder not found | Report error, cannot proceed |
-| Task not found in tasks.md | Report error, check task ID |
+| Ticket not found | Report error, check task ID with `tk show <task-id>` |
 | Over token limit after max pruning | Report warning, proceed with best effort |
 | Missing acceptance.md | Use acceptance criteria from spec.md |
 | Missing progress.md | Generate bundle without progress section |

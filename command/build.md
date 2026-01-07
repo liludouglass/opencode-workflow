@@ -20,7 +20,7 @@ Execute the full spec-driven development workflow for: $ARGUMENTS
 If these exist in the project, load them:
 - `.opencode/spec.md` - Technical specification
 - `.opencode/requirements.md` - User requirements  
-- `.opencode/tasks.md` - Task breakdown
+- Query tickets via `tk query` - Task breakdown
 
 ## Instructions
 

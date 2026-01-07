@@ -18,7 +18,7 @@ You are invoked during **Phase 5 (Integration)** in parallel with @regression-de
 You receive:
 1. **spec.md** - The full specification
 2. **acceptance.md** - All acceptance criteria
-3. **tasks.md** - Task list with completion status
+3. **tickets/** - Ticket files with completion status (query via `tk query`)
 4. **Implemented code** - All code changes from all tasks
 5. **Test results** - Full test suite results
 
@@ -206,8 +206,8 @@ For each acceptance criterion:
 # When to Loop Back
 
 If non-compliant:
-1. Create specific bug entries for each gap
-2. Add to tasks.md as fix tasks
+1. Create specific bug tickets via `tk create "<title>" --type bug`
+2. Set dependencies via `tk dep` as needed
 3. Return to @implementer for targeted fixes
 4. Re-verify after fixes
 

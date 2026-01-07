@@ -25,7 +25,7 @@ You are responsible for:
 You receive:
 - **spec.md**: Full specification for the feature
 - **acceptance.md**: All checkable acceptance criteria
-- **tasks.md**: Task breakdown with completion status
+- **tickets/**: Task tickets managed via tk CLI
 - **progress.md**: Implementation progress log
 - **Implemented code**: All files created/modified during Phase 4
 
@@ -194,18 +194,15 @@ Wait for all verification agents to complete before proceeding.
 
 1. Document the integration failure
 2. Identify which component(s) need fixes
-3. Create bug entries in tasks.md:
+3. Create bug tickets via `tk create --type bug`:
 
-```markdown
-## Integration Bug Entries
-
-### BUG-INT-001: [Description]
-- **Component:** [affected component]
-- **Symptom:** [what's broken]
-- **Expected:** [what should happen]
-- **Actual:** [what happens instead]
-- **Priority:** HIGH/MEDIUM/LOW
-- **Status:** pending_fix
+```bash
+tk create --type bug --title "[Description]" --priority high \
+  --body "Component: [affected component]
+Symptom: [what's broken]
+Expected: [what should happen]
+Actual: [what happens instead]" \
+  --dir .opencode/spec/FEAT-XXX/tickets
 ```
 
 ### If Verification Agents Report Issues
@@ -334,10 +331,10 @@ Return to Phase 4 (do NOT emit `<complete/>`) when:
 6. Return to Phase 4 if deferred items need implementation
 
 When looping back:
-1. Update tasks.md with new fix tasks
-2. Mark which specific tasks need rework
+1. Create new fix tickets via `tk create --type bug` or `tk create --type task`
+2. Link fix tickets to the relevant epic
 3. Provide clear description of what needs fixing
-4. Set status back to `integration_failed`
+4. Update epic status to `integration_failed`
 
 ## Escalation Conditions
 
@@ -359,7 +356,7 @@ Escalate to human when:
 ## Example Integration Flow
 
 ```
-1. Read spec.md, acceptance.md, tasks.md
+1. Read spec.md, acceptance.md, query tickets via `tk query`
 2. Run: npm run type-check
 3. Run: npm run lint  
 4. Run: npm test
@@ -373,7 +370,7 @@ Escalate to human when:
 12. Compile integration-report.md
 13. Decision: PROCEED or LOOP_BACK or ESCALATE
 14. If all pass: emit <complete/>
-15. If issues: update tasks.md, return to Phase 4
+15. If issues: create fix tickets via `tk create`, return to Phase 4
 ```
 
 ## Important Notes

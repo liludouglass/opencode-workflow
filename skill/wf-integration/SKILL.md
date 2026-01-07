@@ -27,7 +27,7 @@ Verify all implemented pieces work together correctly through comprehensive test
 - Completed implementation from Phase 4
 - `spec.md` - Full specification
 - `acceptance.md` - Checkable criteria
-- `tasks.md` - All tasks marked complete
+- All tickets closed (via `tk query '.status == "closed"'`)
 - `progress.md` - Implementation log
 - Access to full test suite
 
@@ -155,14 +155,11 @@ Spawn verification agents in parallel:
 
 If issues are found:
 
-1. **Create bug entries** in `tasks.md`:
-   ```markdown
-   ## Integration Bugs
-   
-   - [ ] BUG-INT-001: Share link generation not working
-     - Severity: HIGH
-     - Found in: Step 3 - Edge Case Testing
-     - Root cause: [If known]
+1. **Create bug tickets** via `tk create --type bug`:
+   ```bash
+   tk create --type bug --title "Share link generation not working" \
+     --priority high --labels "integration,bug" \
+     --body "Found in: Step 3 - Edge Case Testing\nRoot cause: [If known]"
    ```
 
 2. **Loop back to Phase 4** for targeted fixes
@@ -251,8 +248,8 @@ Create `integration-report.md`:
 When integration fails:
 
 1. **Categorize failures** by severity (critical, high, medium, low)
-2. **Create targeted fix tasks** in tasks.md
-3. **Create new ticket with appropriate dependencies**
+2. **Create fix tickets** via `tk create --type bug --priority <severity>`
+3. **Set dependencies** via `tk update <id> --blocked-by <other-id>`
 4. **Loop back to Phase 4** for implementation
 5. **Re-run integration** after fixes complete
 

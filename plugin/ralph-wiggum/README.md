@@ -35,7 +35,7 @@ Execute a single task using the Ralph Wiggum iteration loop.
 
 **Parameters:**
 - `taskId` (string): Task identifier (e.g., "TASK-001")
-- `featureDir` (string): Path to feature directory containing spec.md, tasks.md, etc.
+- `featureDir` (string): Path to feature directory containing spec.md, tickets/, etc.
 - `maxIterations` (number, optional): Maximum iterations before escalation (default: 10)
 
 **Example:**
@@ -102,7 +102,7 @@ A feature directory should contain:
 ```
 feature-name/
 ├── spec.md           # Feature specification
-├── tasks.md          # Task breakdown
+├── tickets/          # Task tickets (managed via tk CLI)
 ├── acceptance.md     # Acceptance criteria
 ├── progress.md       # Execution progress log
 └── ...              # Implementation files

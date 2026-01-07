@@ -22,7 +22,7 @@ Wrap up completed work, generate summary documentation, and prepare for merge or
 - `integration-report.md` - Passing integration results
 - `spec.md` - Original specification
 - `acceptance.md` - All criteria verified
-- `tasks.md` - All tasks marked complete
+- All tickets closed (via `tk query`)
 - `progress.md` - Full implementation log
 - Git history of commits made during implementation
 
@@ -35,7 +35,7 @@ Confirm all prerequisites are met:
 ```markdown
 ## Completion Checklist
 
-- [ ] All tasks in tasks.md marked [x]
+- [ ] All tickets have status 'closed'
 - [ ] Integration report shows PASS status
 - [ ] All acceptance criteria verified
 - [ ] CI is green (tests, lint, type-check, build)
@@ -112,7 +112,7 @@ rm -rf .work/features/FEAT-XXX/context/
 # - approach.md
 # - spec.md
 # - acceptance.md
-# - tasks.md
+# - tickets/ directory
 # - progress.md
 # - integration-report.md
 # - summary.md
@@ -283,7 +283,7 @@ mv .work/features/FEAT-XXX .work/archive/FEAT-XXX-[feature-name]/
 # - approach.md
 # - spec.md
 # - acceptance.md
-# - tasks.md
+# - tickets/ directory
 # - progress.md
 # - integration-report.md
 # - summary.md
@@ -297,7 +297,7 @@ mv .work/features/FEAT-XXX .work/archive/FEAT-XXX-[feature-name]/
 
 ```
 Finalizer:
-1. Verifies: All tasks complete, integration passed
+1. Verifies: All tickets closed (`tk query '.status == "closed"'`), integration passed
 2. Generates summary:
    - 3 main features implemented
    - 5 key decisions documented

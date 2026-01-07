@@ -39,7 +39,7 @@ ls .opencode/specs/
 ```
 
 If a relevant spec exists:
-- Read `spec.md` and `tasks.md`
+- Read `spec.md` and query tickets via `tk query`
 - Note which requirements might be affected
 - This helps determine if it's a spec violation vs implementation bug
 

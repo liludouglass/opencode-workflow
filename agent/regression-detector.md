@@ -196,8 +196,8 @@ For each regression:
 # When to Loop Back
 
 If regressions found:
-1. Create specific bug entries for each regression
-2. Add to tasks.md as fix tasks
+1. Create specific bug tickets via `tk create "<title>" --type bug`
+2. Set dependencies via `tk dep` as needed
 3. Return to @implementer for fixes
 4. Re-run regression detection after fixes
 

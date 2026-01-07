@@ -192,7 +192,7 @@ Based on the task scope, consider breaking into these atomic steps:
 - **Generated**: 2026-01-04 10:30:15
 - **Generator**: @context-manager v2.1
 - **Source Spec**: /path/to/spec.md (sections 2.1, 3.4)
-- **Source Tasks**: /path/to/tasks.md (TASK-XXX)
+- **Source Ticket**: tickets/TASK-XXX.md (via tk show)
 - **Relevance Score**: 92% (High)
 - **Completeness Score**: 96% (Complete)
 - **Efficiency Score**: 8.2K tokens (Efficient)

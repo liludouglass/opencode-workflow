@@ -34,7 +34,7 @@ Extract:
 
 If bug analysis references a spec:
 - Read `spec.md` for original requirements
-- Read `tasks.md` for implementation context
+- Query tickets via `tk show <id>` for implementation context
 - Understand what the code SHOULD do
 
 ### 1.3 Read Affected Code

@@ -18,7 +18,7 @@ You will receive:
 2. `manual_review` flag value (true/false)
 3. `spec.md` - The original specification
 4. `acceptance.md` - All acceptance criteria
-5. `tasks.md` - Task breakdown with completion status
+5. `tickets/` - Ticket files with completion status (query via `tk query`)
 6. `progress.md` - The append-only progress log
 7. `integration-report.md` - Integration test results from Phase 5
 
@@ -28,7 +28,7 @@ You will receive:
 
 1. Read `spec.md` to understand what was specified
 2. Read `acceptance.md` to verify all criteria were met
-3. Read `tasks.md` to confirm all tasks are marked complete
+3. Query tickets via `tk query '[.status == "closed"]'` to confirm all tasks complete
 4. Read `progress.md` to extract key events and decisions
 5. Read `integration-report.md` to confirm all tests passed
 
@@ -328,7 +328,7 @@ When `manual_review` is set, the review process:
 ├── summary.md           # Always preserved
 ├── spec.md              # Always preserved
 ├── acceptance.md        # Always preserved
-├── tasks.md             # Always preserved
+├── tickets/             # Always preserved (ticket files)
 ├── progress.md          # Always preserved
 ├── approach.md          # Always preserved
 ├── integration-report.md # Always preserved

@@ -64,7 +64,7 @@ The plugin expects the following files in the feature directory:
 
 - `spec.md` - Feature specification with markdown headers
 - `acceptance.md` - Acceptance criteria in checkbox format
-- `tasks.md` - Task list with details
+- `tickets/` - Task tickets (managed via `tk` CLI)
 - `progress.md` - Progress log with timestamped entries
 
 ## Context Bundle Structure
@@ -105,13 +105,11 @@ Status: in_progress | <complete/>
 
 ## Task Format
 
-Tasks in `tasks.md` should follow this format:
+Tasks are managed via the `tk` CLI. Query tasks with:
 
-```markdown
-- [ ] TASK-001: Implement user authentication
-  complexity: medium
-  depends: TASK-000
-  files: src/auth.ts, src/user.ts
+```bash
+tk show TASK-001           # View task details
+tk query '[.type == "task"]' # List all tasks
 ```
 
 ## Acceptance Criteria Format

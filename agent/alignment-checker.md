@@ -18,7 +18,7 @@ You are invoked during **Phase 4 (Implementation)** after each task is implement
 You receive:
 1. **spec.md** - Relevant section(s) for this task
 2. **acceptance.md** - Criteria this task claims to fulfill
-3. **tasks.md** - Task description and requirements
+3. **ticket** - Task description and requirements (via `tk show <id>`)
 4. **Implemented code** - The actual code changes made
 5. **Test results** - Output from test runs
 

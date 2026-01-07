@@ -105,7 +105,7 @@ After completion, the work folder contains:
 ├── analysis.md            # Root cause analysis
 ├── spec.md                # Simplified fix specification
 ├── acceptance.md          # Fix verification criteria
-├── tasks.md               # Task breakdown (usually 1-3 tasks)
+├── tickets/               # Task tickets (usually 1-3 tasks)
 ├── progress.md            # Implementation log
 ├── integration-report.md  # Regression test results
 └── summary.md             # Fix summary

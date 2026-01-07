@@ -33,7 +33,7 @@ Debug runtime errors - but FIRST check if error relates to a spec violation.
 
 2. Read these files (use `read` tool):
    - `spec.md` - Technical specification
-   - `tasks.md` - Task breakdown with acceptance criteria
+   - `tickets/` - Query via `tk show <id>` for task details and acceptance criteria
    - `requirements.md` - Original requirements (if exists)
 
 3. If no spec folder exists, inform user:
@@ -93,7 +93,7 @@ For EACH requirement in the spec, check:
    npm test / pytest / go test / cargo test
    ```
 
-2. Check acceptance criteria from tasks.md:
+2. Check acceptance criteria from tickets (via `tk show <id>`):
    - Can each criterion be verified?
    - Do tests cover the criteria?
 

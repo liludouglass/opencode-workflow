@@ -9,7 +9,7 @@ Provide a quick status overview of the current project.
 ## Check These Files
 
 1. **Spec Status**: Check if `.opencode/spec.md` exists
-2. **Tasks Status**: Check if `.opencode/tasks.md` exists and count completed/total
+2. **Tasks Status**: Query tickets via `tk query` and count open/closed
 3. **Scratchpad**: Check if `.opencode/scratchpad.md` has content
 4. **Git Status**: Run `git status --short` if in a git repo
 
@@ -24,7 +24,7 @@ Provide a quick status overview of the current project.
 **Git**: [clean/X files changed]
 
 ### Current Focus
-[Based on tasks.md, what's the current work item]
+[Based on `tk ready`, what's the current work item]
 
 ### Blockers
 [Any issues noted in scratchpad or failing tests]

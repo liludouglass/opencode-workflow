@@ -37,7 +37,6 @@ You are `@coordination-files` - a specialized utility agent that creates and man
 ├── spec.md
 ├── acceptance.md
 ├── audit-report.md
-├── tasks.md
 ├── progress.md
 ├── integration-report.md
 ├── summary.md
@@ -242,7 +241,7 @@ Additional files created by later phases:
 - `spec.md` - Phase 2, by @spec-writer
 - `acceptance.md` - Phase 2, by @spec-writer
 - `audit-report.md` - Phase 2, by @spec-auditor
-- `tasks.md` - Phase 3, by @decomposer
+- `tickets/` - Phase 3, by @decomposer (via `tk create`)
 - `integration-report.md` - Phase 5, by @integrator
 - `summary.md` - Phase 6, by @finalizer
 

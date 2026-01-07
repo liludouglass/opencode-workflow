@@ -140,10 +140,9 @@ Phase 6: COMPLETION    → Final review and merge
 - `@coverage-auditor`: Do tasks fully cover entire spec?
 - `@dependency-validator`: Valid DAG? No cycles? Missing dependencies?
 
-**Output**: `tasks.md` with:
-- Task list with descriptions
-- Dependencies between tasks
-- Ticket dependencies
+**Output**: Tickets in `tickets/` directory via `tk create`:
+- Task tickets with descriptions
+- Dependencies between tasks via `tk dep`
 - Complexity scores
 - File touch predictions
 
@@ -226,7 +225,7 @@ Loop until all tickets complete:
 - Implemented code (committed)
 - Test results
 - Progress entries in `progress.md`
-- Updated status in `tasks.md`
+- Updated ticket status via `tk start/close`
 
 **Gate**: AUTOMATED (per-task verification)
 
@@ -250,7 +249,7 @@ Loop until all tickets complete:
 - `@security-auditor`: Vulnerabilities? (if applicable)
 
 **If issues found**:
-- Create bug entries in `tasks.md`
+- Create bug tickets via `tk create "<title>" --type bug`
 - Loop back to Phase 4 for targeted fixes
 
 **Output**: `integration-report.md`
@@ -322,7 +321,7 @@ Loop until all tickets complete:
 │       ├── spec.md                # Full specification (Phase 2)
 │       ├── acceptance.md          # Checkable criteria (Phase 2)
 │       ├── audit-report.md        # Spec verification (Phase 2)
-│       ├── tasks.md               # Task breakdown + dependencies (Phase 3)
+│       ├── tickets/               # Task tickets (Phase 3) via tk CLI
 │       ├── progress.md            # Append-only Ralph log (Phase 4)
 │       ├── integration-report.md  # Integration results (Phase 5)
 │       ├── summary.md             # Final summary (Phase 6)
@@ -336,7 +335,7 @@ Loop until all tickets complete:
 │       ├── report.md
 │       ├── analysis.md
 │       ├── fix.md
-│       └── tasks.md
+│       └── tickets/
 │
 └── archive/                       # Completed work (moved after done)
 ```
@@ -409,7 +408,7 @@ complexity:
 ### Week 1: Foundation
 1. Create folder structure and templates
    - `.work/` directory structure
-   - Template files for spec.md, tasks.md, etc.
+   - Template files for spec.md, etc.
    - config.yaml
 2. Create core agent definitions
    - `@orchestrator.md`
@@ -429,7 +428,7 @@ complexity:
 2. Add parallelization analysis (ticket dependency tracking)
 3. Implement `@coverage-auditor`
 4. Implement `@dependency-validator`
-5. Generate `tasks.md` with ticket dependencies
+5. Create tickets via `tk create` with dependencies via `tk dep`
 
 ### Week 4-5: Implementation Engine
 1. Implement `@context-manager`
@@ -604,7 +603,7 @@ This is critical because:
 .work/features/FEAT-001-user-auth/
 ├── spec.md                    # Full spec (loaded by @spec-writer, @spec-auditor)
 ├── acceptance.md              # Extracted criteria (loaded by verifiers)
-├── tasks.md                   # Task breakdown with status
+├── tickets/                   # Task tickets (managed via tk CLI)
 │
 ├── context/                   # AUTO-MANAGED context files
 │   ├── summary.md             # 1-paragraph summary for @orchestrator
@@ -634,7 +633,7 @@ This is critical because:
 │  Input sources:                                                  │
 │  - spec.md (section 2.3 only)                                    │
 │  - acceptance.md (criteria 4-7 only)                             │
-│  - tasks.md (task 002 details only)                              │
+│  - ticket file for task 002 (via tk show)                        │
 │  - progress.md (last 5 entries only)                             │
 │  - src/auth/service.ts (the file to modify)                      │
 │                                                                  │
@@ -749,7 +748,7 @@ for i in $(seq 1 $MAX_ITERATIONS); do
         echo "Task $TASK_ID complete!"
         # Update task status
         opencode --agent @orchestrator \
-            --prompt "Mark task $TASK_ID as complete in tasks.md"
+        tk close $TASK_ID  # Mark task as complete
         exit 0
     fi
     
@@ -1013,7 +1012,7 @@ Going with Option A (folder per feature)?
 .work/features/FEAT-001-user-auth/
 ├── spec.md
 ├── acceptance.md
-├── tasks.md
+├── tickets/
 ├── progress.md
 ├── context/
 │   └── task-XXX-context.md

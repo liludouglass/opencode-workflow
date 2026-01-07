@@ -570,9 +570,9 @@ Read work folder state to determine phase:
 | approach.md (pending) | Awaiting Phase 1 approval |
 | approach.md (approved) | Phase 2 (specification) |
 | spec.md (pending) | Awaiting Phase 2 approval |
-| spec.md (approved), no tasks.md | Phase 3 (decomposition) |
-| tasks.md, incomplete tasks | Phase 4 (implementation) |
-| All tasks complete, no integration-report | Phase 5 (integration) |
+| spec.md (approved), no tickets/ | Phase 3 (decomposition) |
+| tickets/, open tickets (`tk ready` returns items) | Phase 4 (implementation) |
+| All tickets closed (`tk ready` returns empty) | Phase 5 (integration) |
 | integration-report.md (pass) | Phase 6 (completion) |
 | summary.md | Complete (archive) |
 
@@ -639,7 +639,7 @@ The orchestrator STOPS when:
 ### Verification Failure (Phase 5)
 ```
 1. Log issues to integration-report.md
-2. Create bug entries in tasks.md
+2. Create bug tickets via `tk create "<title>" --type bug`
 3. Loop back to Phase 4 for targeted fixes
 4. Re-run integration after fixes
 ```

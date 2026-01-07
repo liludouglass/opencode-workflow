@@ -13,7 +13,7 @@ Load: `/skill std-test-writing`
 
 # Input
 - `.opencode/specs/<feature>/spec.md` - Specification
-- `.opencode/specs/<feature>/tasks.md` - Tasks
+- `.opencode/specs/<feature>/tickets/` - Task tickets (query via `tk`)
 - Implemented code files
 
 # Output
