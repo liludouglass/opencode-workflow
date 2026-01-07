@@ -21,6 +21,26 @@ You receive a **context bundle** from `@context-manager` containing:
 
 **Target context size**: ~5-10K tokens. You do NOT receive full spec or full codebase.
 
+# Ticket Lifecycle
+
+Your task is managed via the Ticket CLI:
+
+1. **Before you start**: The orchestrator has run `tk start <your-task-id>`
+   - Your task status is now `in_progress`
+   - Other agents can see you're working on this
+
+2. **When you emit `<complete/>`**: The orchestrator will run `tk close <your-task-id>`
+   - Your task status becomes `closed`
+   - Any tasks that depend on yours become "ready"
+   - They can now be picked up by other implementers
+
+3. **If you get stuck**: After max iterations, the orchestrator escalates
+   - Your task remains `in_progress`
+   - Human intervention is requested
+
+**You do NOT run `tk` commands yourself** - the orchestrator handles ticket state.
+Your job is to implement and emit `<complete/>` when done.
+
 # Execution Model
 
 ## 1. Micro-Decomposition

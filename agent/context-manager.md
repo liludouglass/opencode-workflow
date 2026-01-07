@@ -219,16 +219,16 @@ Minimal summary for phase coordination:
 ## Current State
 - Work Item: FEAT-001 - User Authentication
 - Phase: 4 (Implementation)
-- Wave: 2 of 3
+- Ready tasks remaining: 3
 
 ## Progress Summary
 - Tasks Completed: 5/12
-- Current Wave: 2 tasks in progress, 1 completed
+- Current: 2 tasks in progress
 - Blockers: None
 
 ## Next Actions
 - Wait for TASK-006 and TASK-007 to complete
-- Then: Start Wave 3 (TASK-008, TASK-009, TASK-010)
+- Blocked by current: TASK-008, TASK-009, TASK-010
 ```
 
 ### Verification Agent Context (~3-5K tokens)

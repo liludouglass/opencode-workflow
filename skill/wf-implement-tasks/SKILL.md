@@ -1,18 +1,18 @@
 ---
 name: wf-implement-tasks
-description: Phase 4 implementation workflow - Execute tasks via Ralph loops with micro-decomposition and CI-green enforcement
+description: Phase 4 implementation workflow - Execute tasks via Ralph loops with ticket-based parallelization and CI-green enforcement
 ---
 
 # Implementation Workflow (Phase 4)
 
-Execute tasks using the Ralph Wiggum approach with fresh context, micro-decomposition, MAKER-style voting, and CI-green enforcement.
+Execute tasks using the Ralph Wiggum approach with fresh context, micro-decomposition, ticket-based parallelization, and CI-green enforcement.
 
 **CRITICAL**: Load `/skill std-production-code` before implementing. All code must be production-ready.
 
 ## When to Use
 
 - After Phase 3 (Decomposition) is validated
-- When `tasks.md` contains validated task breakdown with waves
+- When tickets are created in `.opencode/spec/FEAT-XXX/tickets/`
 - When ready to write actual code
 
 ## Agent References
@@ -26,7 +26,7 @@ Execute tasks using the Ralph Wiggum approach with fresh context, micro-decompos
 
 ## Input Requirements
 
-- `tasks.md` with wave assignments
+- Ticket directory: `.opencode/spec/FEAT-XXX/tickets/`
 - `spec.md` for reference
 - `acceptance.md` for criteria
 - `progress.md` for continuity
@@ -64,28 +64,49 @@ After completing all work:
 Task TASK-003 finished. All acceptance criteria verified.
 ```
 
+### Ticket-Based Parallelization
+
+Instead of predefined "waves", use dynamic ticket queries:
+
+| Command | Purpose |
+|---------|---------|
+| `tk ready --dir [tickets]` | Get tasks ready to work (all deps resolved) |
+| `tk blocked --dir [tickets]` | Get tasks waiting on dependencies |
+| `tk start <id> --dir [tickets]` | Mark task in progress |
+| `tk close <id> --dir [tickets]` | Mark task complete (unblocks dependents) |
+
+Tasks become "ready" automatically when their dependencies are closed.
+
 ## Execution Model
 
 ```
-For each Wave (parallel group of independent tasks):
+Loop until all tickets complete:
   
-  Spawn up to N Ralph loops in parallel (max_parallel_tasks: 3):
+  1. Query ready tasks:
+     ready_tasks = `tk ready --dir [ticket-dir]`
   
-  Ralph Loop for Task X:
-    for iteration in 1..max_iterations (default: 10):
-      
-      1. CONTEXT GENERATION (@context-manager)
-      2. MICRO-DECOMPOSITION (inside @implementer)
-      3. EXECUTION WITH VOTING (if enabled)
-      4. VERIFICATION
-      5. CI-GREEN ENFORCEMENT
-      6. PROGRESS UPDATE
-      7. COMPLETION CHECK
-    
-    If max_iterations reached: escalate to human
-
-  Wait for all tasks in wave to complete
-  Proceed to next wave
+  2. Check completion:
+     - If no ready AND no blocked: ALL DONE → proceed to Phase 5
+     - If no ready BUT blocked exists: Circular dependency → escalate
+  
+  3. For each ready task (parallelize up to max_parallel_tasks):
+     
+     a. `tk start <task-id>` - Mark in progress
+     
+     b. Ralph Loop (up to max_iterations):
+        1. CONTEXT GENERATION (@context-manager)
+        2. MICRO-DECOMPOSITION (inside @implementer)
+        3. EXECUTION WITH VOTING (if enabled)
+        4. VERIFICATION
+        5. CI-GREEN ENFORCEMENT
+        6. PROGRESS UPDATE
+        7. COMPLETION CHECK
+     
+     c. On complete: `tk close <task-id>` - Unblocks dependents
+     
+     d. If max_iterations reached: escalate to human
+  
+  4. Repeat loop - newly unblocked tasks will appear in `tk ready`
 ```
 
 ## Workflow Steps
@@ -101,7 +122,7 @@ For each Wave (parallel group of independent tasks):
 - **ID**: TASK-003
 - **Description**: Implement favorites API endpoints
 - **Acceptance Criteria**: AC-4, AC-5
-- **Dependencies**: TASK-001 (complete)
+- **Dependencies**: TASK-001 (closed), TASK-002 (closed)
 
 ## Relevant Spec Sections
 [Only sections 2.3 and 2.4 from spec.md]
@@ -243,34 +264,53 @@ Append to `progress.md`:
 - [ ] Code committed
 - [ ] Progress logged
 
-If ALL checked → emit <complete/>
+If ALL checked → emit <complete/> → orchestrator runs `tk close`
 If ANY unchecked → continue to next iteration
 ```
 
-## Wave Execution
+## Ticket-Based Execution Flow
 
 ```
-Wave 1: [TASK-001, TASK-002] - independent
-   ↓
-┌─────────────┐  ┌─────────────┐
-│ Ralph(001)  │  │ Ralph(002)  │  (parallel)
-│ iter 1      │  │ iter 1      │
-│ iter 2      │  │ <complete/> │
-│ <complete/> │  └─────────────┘
-└─────────────┘
-         ↓
-All Wave 1 complete → proceed
-         ↓
-Wave 2: [TASK-003, TASK-004] - depend on Wave 1
-   ↓
-┌─────────────┐  ┌─────────────┐
-│ Ralph(003)  │  │ Ralph(004)  │  (parallel)
-│ iter 1      │  │ iter 1      │
-│ <complete/> │  │ iter 2      │
-└─────────────┘  │ <complete/> │
-                 └─────────────┘
-         ↓
-All Wave 2 complete → proceed to Wave 3...
+Initial state:
+  TASK-001: open (no deps) → ready
+  TASK-002: open (no deps) → ready
+  TASK-003: open (deps: 001, 002) → blocked
+  TASK-004: open (deps: 003) → blocked
+
+Iteration 1:
+  `tk ready` returns: [TASK-001, TASK-002]
+  
+  ┌─────────────┐  ┌─────────────┐
+  │ Ralph(001)  │  │ Ralph(002)  │  (parallel)
+  │ tk start    │  │ tk start    │
+  │ implement   │  │ implement   │
+  │ tk close    │  │ tk close    │
+  └─────────────┘  └─────────────┘
+  
+  After: TASK-001=closed, TASK-002=closed
+         TASK-003 deps resolved → now ready!
+
+Iteration 2:
+  `tk ready` returns: [TASK-003]
+  
+  ┌─────────────┐
+  │ Ralph(003)  │
+  │ tk start    │
+  │ implement   │
+  │ tk close    │
+  └─────────────┘
+  
+  After: TASK-003=closed
+         TASK-004 deps resolved → now ready!
+
+Iteration 3:
+  `tk ready` returns: [TASK-004]
+  ... continues until all closed ...
+
+Final:
+  `tk ready` returns: []
+  `tk blocked` returns: []
+  → All complete! Proceed to Phase 5
 ```
 
 ## Configuration
@@ -306,7 +346,7 @@ complexity:
 | Implemented code | Committed to repository |
 | Test results | All tests passing |
 | Progress entries | Appended to progress.md |
-| Task status | Updated in tasks.md |
+| Ticket status | Updated via `tk close` |
 
 ## Success Criteria
 
@@ -320,7 +360,7 @@ For each task:
 - [ ] Code committed with good message
 - [ ] Progress appended to progress.md
 - [ ] `<complete/>` signal emitted
-- [ ] Task marked [x] in tasks.md
+- [ ] Ticket closed via `tk close`
 
 ## Failure Handling
 
@@ -386,8 +426,9 @@ Iteration 2:
 8. Checks completion: 5/5 acceptance criteria - COMPLETE
 9. Emits: <complete/>
 
-Task marked [x] in tasks.md
-Proceeds to next task in wave
+Orchestrator runs `tk close TASK-003`
+Dependent tasks (TASK-004) become ready
+Proceeds to next iteration of main loop
 ```
 
 ## Loading Standards
@@ -406,4 +447,4 @@ Load additional standards based on task domain:
 
 ## Next Steps
 
-After all waves complete, proceed to Phase 5: Integration using `/skill wf-integration`.
+After all tickets are closed (`tk ready` and `tk blocked` both empty), proceed to Phase 5: Integration using `/skill wf-integration`.

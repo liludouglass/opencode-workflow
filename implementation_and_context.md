@@ -131,7 +131,7 @@ Phase 6: COMPLETION    → Final review and merge
    - If larger: recursive decomposition into subtasks
 3. Map dependencies (blocks, requires)
 4. **Analyze parallelization**:
-   - Group independent tasks into execution waves
+   - Track task dependencies via tickets
    - Detect file conflicts (tasks touching same files cannot parallelize)
    - Calculate critical path
 5. Assign complexity scores per task
@@ -143,7 +143,7 @@ Phase 6: COMPLETION    → Final review and merge
 **Output**: `tasks.md` with:
 - Task list with descriptions
 - Dependencies between tasks
-- Wave assignments (parallel groups)
+- Ticket dependencies
 - Complexity scores
 - File touch predictions
 
@@ -168,9 +168,9 @@ complete_signal: "<complete/>"
 **Execution Model**:
 
 ```
-For each Wave (parallel group of independent tasks):
+Loop until all tickets complete:
   
-  Spawn up to N Ralph loops in parallel:
+  Spawn up to N Ralph loops in parallel for ready tickets (dependencies met):
   
   Ralph Loop for Task X:
     for iteration in 1..max_iterations:
@@ -218,8 +218,8 @@ For each Wave (parallel group of independent tasks):
     
     If max_iterations reached: escalate to human
 
-  Wait for all tasks in wave to complete
-  Proceed to next wave
+  When a ticket completes, check for newly unblocked tickets
+  Continue until all tickets are complete
 ```
 
 **Output per task**:
@@ -322,7 +322,7 @@ For each Wave (parallel group of independent tasks):
 │       ├── spec.md                # Full specification (Phase 2)
 │       ├── acceptance.md          # Checkable criteria (Phase 2)
 │       ├── audit-report.md        # Spec verification (Phase 2)
-│       ├── tasks.md               # Task breakdown + waves (Phase 3)
+│       ├── tasks.md               # Task breakdown + dependencies (Phase 3)
 │       ├── progress.md            # Append-only Ralph log (Phase 4)
 │       ├── integration-report.md  # Integration results (Phase 5)
 │       ├── summary.md             # Final summary (Phase 6)
@@ -426,10 +426,10 @@ complexity:
 
 ### Week 3: Decomposition
 1. Implement `@decomposer`
-2. Add parallelization analysis (wave grouping)
+2. Add parallelization analysis (ticket dependency tracking)
 3. Implement `@coverage-auditor`
 4. Implement `@dependency-validator`
-5. Generate `tasks.md` with waves
+5. Generate `tasks.md` with ticket dependencies
 
 ### Week 4-5: Implementation Engine
 1. Implement `@context-manager`
@@ -438,7 +438,7 @@ complexity:
    - Voting mechanism (configurable N)
    - CI-green enforcement
 3. Create Ralph loop bash script
-4. Implement parallel wave execution
+4. Implement parallel ticket-based execution
 5. Implement `@alignment-checker`
 6. Implement `@quality-gate`
 
@@ -464,7 +464,7 @@ complexity:
 3. **CI must be green** - Never commit broken code
 4. **Verify proactively** - Don't wait until the end to find issues
 5. **Progress persists** - Append-only logs survive crashes
-6. **Parallel where independent** - Wave-based execution
+6. **Parallel where independent** - Ticket-based dependency tracking
 7. **Decompose until atomic** - Micro-steps should be trivial to execute
 8. **Vote when uncertain** - Multiple attempts, majority wins
 
@@ -767,23 +767,26 @@ exit 1
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│  WAVE EXECUTOR (coordinates parallel Ralph loops)               │
+│  TICKET EXECUTOR (coordinates parallel Ralph loops)             │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                  │
-│  Wave 1: [Task A, Task B, Task C] - independent                  │
+│  Tickets with no blockers: [Task A, Task B, Task C]              │
 │                                                                  │
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐              │
 │  │ Ralph(A)    │  │ Ralph(B)    │  │ Ralph(C)    │              │
 │  │ iteration 1 │  │ iteration 1 │  │ iteration 1 │              │
 │  │ iteration 2 │  │ iteration 2 │  │ <complete/> │ ← done       │
 │  │ <complete/> │  │ iteration 3 │  └─────────────┘              │
-│  └─────────────┘  │ <complete/> │                               │
-│                   └─────────────┘                               │
+│  └─────────────┘  │ <complete/> │         │                     │
+│        │         └─────────────┘         │                     │
+│        │                │                 │                     │
+│        └────────────────┴─────────────────┘                     │
+│                         │                                        │
+│                         ▼                                        │
+│  Task D (blocked by A) and Task E (blocked by B) now unblocked  │
+│  Start immediately as dependencies complete                      │
 │                                                                  │
-│  All complete → proceed to Wave 2                                │
-│                                                                  │
-│  Wave 2: [Task D, Task E] - depend on Wave 1                     │
-│  ...                                                             │
+│  Loop continues until all tickets complete                       │
 │                                                                  │
 └─────────────────────────────────────────────────────────────────┘
 ```
@@ -890,7 +893,7 @@ Status: <complete/>
 ║  │  └─────────────────────────────────────────────────────────┘ │ ║
 ║  │                              │                                │ ║
 ║  │                              ▼                                │ ║
-║  │  Wave Executor (parallel tasks)                               │ ║
+║  │  Ticket Executor (parallel tasks by dependency)               │ ║
 ║  │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐          │ ║
 ║  │  │ Ralph(T1)   │  │ Ralph(T2)   │  │ Ralph(T3)   │          │ ║
 ║  │  │             │  │             │  │             │          │ ║
@@ -982,7 +985,7 @@ The complete system now has:
 | **Phase 1-3** | Shaping → Spec → Decomposition (front-loaded quality) |
 | **@context-manager** | Generates minimal context bundles per task |
 | **Ralph loops @ task level** | Fresh context, clean slate, iterate until done |
-| **Parallel wave execution** | Independent tasks run simultaneously |
+| **Ticket-based parallel execution** | Independent tasks run simultaneously based on dependencies |
 | **MAKER-style voting** | Complex steps get N parallel attempts |
 | **Verification agents** | Check each phase proactively |
 | **CI-green enforcement** | Only commit working code |
@@ -993,7 +996,7 @@ The complete system now has:
 
 1. **Context never rots** - Fresh bundle per task iteration
 2. **Work is sized correctly** - Tasks are ~1-2 hours, micro-steps are atomic
-3. **Parallel where possible** - Wave-based execution
+3. **Parallel where possible** - Ticket-based dependency tracking
 4. **Long-running is safe** - Ralph loops with clear stop conditions
 5. **Quality is enforced** - CI must pass before any commit
 6. **Progress persists** - Even if agent crashes, progress.md survives

@@ -15,7 +15,6 @@
 | **Complexity** | [1-5] |
 | **Estimated Time** | [X hours] |
 | **Dependencies** | [TASK-YYY, TASK-ZZZ] |
-| **Wave** | [Wave number] |
 | **Status** | [pending \| in_progress \| complete] |
 
 ### Acceptance Criteria to Satisfy

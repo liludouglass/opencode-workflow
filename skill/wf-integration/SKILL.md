@@ -10,7 +10,7 @@ Verify all implemented pieces work together correctly through comprehensive test
 ## When to Use
 
 - After all implementation tasks in Phase 4 are complete
-- When all waves have emitted `<complete/>` signals
+- When all tickets are closed (`tk ready` returns empty)
 - Before proceeding to final completion (Phase 6)
 
 ## Agent References
@@ -252,7 +252,7 @@ When integration fails:
 
 1. **Categorize failures** by severity (critical, high, medium, low)
 2. **Create targeted fix tasks** in tasks.md
-3. **Assign to appropriate wave** (usually new Wave N+1)
+3. **Create new ticket with appropriate dependencies**
 4. **Loop back to Phase 4** for implementation
 5. **Re-run integration** after fixes complete
 

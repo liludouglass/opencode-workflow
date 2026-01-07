@@ -140,7 +140,6 @@ Bug specs use L2 depth with focused sections:
 
 - `/feature` - Full feature workflow (all 6 phases)
 - `/improve` - Enhancement workflow with lighter spec
-- `/convoy` - Continue workflow from current state
 - `/debug` - Analyze and diagnose bugs before fixing
 
 ## Prerequisites

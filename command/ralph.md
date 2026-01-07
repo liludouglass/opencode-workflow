@@ -134,7 +134,6 @@ Each iteration generates a fresh context bundle:
 ## Task Details
 - ID: TASK-001
 - Description: Create User model with validation
-- Wave: 1
 - Dependencies: none
 - Complexity: 3
 
@@ -232,7 +231,6 @@ This prevents the degradation that occurs when agents run too long with accumula
 
 ## Related Commands
 
-- `/convoy` - Orchestrate full workflow (uses Ralph internally)
 - `/feature` - Start feature workflow (Phase 4 uses Ralph)
 - `/bug` - Start bug workflow (Phase 4 uses Ralph)
 

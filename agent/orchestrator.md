@@ -417,22 +417,38 @@ Wait for: ticket files in tickets/ folder
 **Agents**: `@context-manager` + `@implementer` (via Ralph loops)
 **Supporting**: `@alignment-checker`, `@quality-gate`
 
-**Invoke when**: Phase 3 complete and tasks validated
+**Invoke when**: Phase 3 complete and tickets validated
+
+**Ticket directory**: `.opencode/spec/FEAT-XXX/tickets`
 
 **Your action**:
 ```
-For each Wave (in order):
-  For each Task in Wave (can parallelize up to max_parallel_tasks):
-    
-    Ralph Loop:
-    1. Invoke @context-manager to generate context bundle
-    2. Invoke @implementer with fresh context
-    3. Check for <complete/> signal
-    4. If not complete: repeat (up to max_iterations)
-    5. If max_iterations: escalate to human
-
-  Wait for all tasks in wave to complete
-  Proceed to next wave
+Loop until all tickets complete:
+  
+  1. Query ready tasks:
+     `tk ready --dir [ticket-dir]`
+  
+  2. If no ready tasks:
+     - Check `tk blocked --dir [ticket-dir]`
+     - If blocked exists: Possible circular dependency - escalate to human
+     - If no blocked: All tasks complete - proceed to Phase 5
+  
+  3. For each ready task (parallelize up to max_parallel_tasks):
+     
+     a. Mark task started:
+        `tk start <task-id> --dir [ticket-dir]`
+     
+     b. Ralph Loop:
+        1. Invoke @context-manager with task-id
+        2. Invoke @implementer with fresh context
+        3. Check for <complete/> signal
+        4. If not complete: repeat (up to max_iterations)
+        5. If max_iterations: escalate to human
+     
+     c. On task complete:
+        `tk close <task-id> --dir [ticket-dir]`
+  
+  4. Repeat loop until `tk ready` returns empty
 ```
 
 **Gate**: AUTOMATED - per-task verification via CI-green enforcement
@@ -440,7 +456,7 @@ For each Wave (in order):
 **Output per task**:
 - Implemented code (committed)
 - Progress entries in `progress.md`
-- Updated status in `tasks.md`
+- Ticket status updated via `tk start/close`
 
 ---
 

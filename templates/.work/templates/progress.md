@@ -65,16 +65,16 @@ The `<complete/>` signal indicates:
 
 When an agent emits `<complete/>`:
 1. The Ralph loop for this task terminates successfully
-2. Task status in tasks.md is updated to complete
-3. Wave executor checks if all tasks in wave are done
-4. If wave complete, proceeds to next wave
+2. Ticket is closed and marked complete
+3. Orchestrator checks if more tasks are ready via `tk ready`
+4. If tickets closed, newly unblocked tasks become ready
 
 ### Iteration Limit
 
 If `max_iterations_per_task` (default: 10) is reached without `<complete/>`:
 1. Task is flagged for human escalation
 2. Error entry is logged
-3. Other tasks in the wave continue
+3. Other in-progress tasks continue
 4. Human intervention required to unblock
 
 ---

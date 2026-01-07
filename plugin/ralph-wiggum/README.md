@@ -10,7 +10,7 @@ The Ralph Wiggum plugin provides a robust execution framework for complex develo
 - **Clear completion signals** - Tasks emit `<complete/>` when done
 - **CI-green enforcement** - All code must pass CI checks before proceeding
 - **Progress persistence** - All iterations are logged for debugging
-- **Wave-based parallel execution** - Independent tasks can run concurrently
+- **Ticket-based parallel execution** - Independent tasks run based on dependency tracking
 
 ## Installation
 
@@ -52,29 +52,6 @@ await ralph_execute_task({
 - ⚠️ Max iterations: Task needs human intervention
 - ❌ CI failed: Task failed CI checks
 - ❌ Error: Task failed with error message
-
-### `ralph_execute_wave`
-
-Execute multiple independent tasks in parallel.
-
-**Parameters:**
-- `waveNumber` (number): Wave identifier for logging
-- `taskIds` (string[]): Array of task IDs to execute in parallel
-- `featureDir` (string): Path to feature directory
-- `maxParallel` (number, optional): Maximum parallel tasks (default: 3)
-
-**Example:**
-```typescript
-await ralph_execute_wave({
-  waveNumber: 1,
-  taskIds: ["TASK-001", "TASK-002", "TASK-003"],
-  featureDir: "/path/to/feature",
-  maxParallel: 2
-})
-```
-
-**Returns:**
-Summary of all task results with completion status.
 
 ### `ralph_ci_check`
 
@@ -143,15 +120,6 @@ feature-name/
 3. **Completion**: Task completes when signal detected and CI passes
 4. **Escalation**: Human intervention needed if max iterations reached
 
-## Wave Execution
-
-Waves allow parallel execution of independent tasks:
-
-1. **Batching**: Tasks are grouped by `maxParallel` setting
-2. **Parallel Execution**: Each batch runs concurrently
-3. **Sequential Batches**: Next batch starts when current batch completes
-4. **Failure Handling**: Wave fails if any task fails
-
 ## Progress Logging
 
 All iterations are logged to `progress.md`:
@@ -203,26 +171,6 @@ const result = await ralph_execute_task({
 })
 
 console.log(result) // "✅ Task TASK-001 completed successfully in 3 iteration(s)."
-```
-
-### Wave Execution
-
-```typescript
-// Execute multiple tasks in parallel
-const result = await ralph_execute_wave({
-  waveNumber: 1,
-  taskIds: ["TASK-001", "TASK-002", "TASK-003"],
-  featureDir: "./features/user-auth",
-  maxParallel: 2
-})
-
-console.log(result)
-// Wave 1 Results:
-//   ✅ TASK-001: complete (2 iterations)
-//   ✅ TASK-002: complete (1 iterations) 
-//   ⚠️ TASK-003: max_iterations (10 iterations)
-//
-// ⚠️ Some tasks need attention.
 ```
 
 ### CI Checks

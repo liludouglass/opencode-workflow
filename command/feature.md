@@ -125,7 +125,6 @@ After completion, the work folder contains:
 
 - `/bug` - Simplified workflow for bug fixes (skips Phase 1)
 - `/improve` - Enhancement workflow with lighter spec depth (L2)
-- `/convoy` - Continue workflow from current state
 - `/ralph` - Run Ralph loop on specific task
 
 ## Prerequisites

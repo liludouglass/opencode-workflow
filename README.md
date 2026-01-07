@@ -122,7 +122,7 @@ This repository contains customizations for OpenCode that enable:
 
 - **6-Phase Workflow**: Shaping -> Specification -> Decomposition -> Implementation -> Integration -> Completion
 - **Ralph Wiggum Execution**: Fresh context iterations with clear stop conditions
-- **Parallel Task Execution**: Wave-based coordination for independent tasks
+- **Parallel Task Execution**: Ticket-based dependency tracking for parallel task execution
 - **CI-Green Enforcement**: Mandatory passing tests before commits
 - **Context Management**: Minimal, focused context bundles per task
 

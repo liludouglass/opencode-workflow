@@ -166,7 +166,6 @@ Same structure as `/feature`:
 
 - `/feature` - Full feature workflow with L3/L4 spec depth
 - `/bug` - Bug fix workflow (simplified phases)
-- `/convoy` - Continue workflow from current state
 - `/ralph` - Run Ralph loop on specific task
 
 ## Prerequisites

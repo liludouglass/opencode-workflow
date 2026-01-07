@@ -1,8 +1,9 @@
 # Tasks: [Feature Name]
 
 <!-- Phase 3 Task Breakdown Template -->
+<!-- NOTE: Tickets (`tk` CLI) are now preferred over this file for task management -->
+<!-- This template is preserved for reference/legacy projects -->
 <!-- Created by @decomposer agent -->
-<!-- Verified by @coverage-auditor and @dependency-validator -->
 
 ## Summary
 
@@ -10,14 +11,14 @@
 |--------|-------|
 | Total Tasks | X |
 | Estimated Effort | X hours |
-| Waves | X |
 | Critical Path | X hours |
 
 ---
 
-## Wave 1 (Parallel)
+## Tasks
 
-<!-- Independent tasks that can run simultaneously -->
+<!-- Tasks are organized by dependencies, not waves -->
+<!-- Use `tk create` to create tickets for each task -->
 
 ### TASK-001: [Description]
 
@@ -50,10 +51,6 @@
 
 ---
 
-## Wave 2 (Depends on Wave 1)
-
-<!-- Tasks that depend on Wave 1 completion -->
-
 ### TASK-003: [Description]
 
 - **Status**: [ ] pending
@@ -69,10 +66,6 @@
 [Detailed description of what needs to be done]
 
 ---
-
-## Wave 3 (Depends on Wave 2)
-
-<!-- Tasks that depend on Wave 2 completion -->
 
 ### TASK-004: [Description]
 
@@ -92,9 +85,9 @@
 ## Dependency Graph
 
 ```
-Wave 1 (Parallel):
+Independent:
 TASK-001 ──┐
-           ├── Wave 2: TASK-003 ──── Wave 3: TASK-004
+           ├── TASK-003 ──── TASK-004
 TASK-002 ──┘
 ```
 
@@ -106,7 +99,7 @@ TASK-002 ──┘
 
 | File | Tasks | Conflict Resolution |
 |------|-------|---------------------|
-| `path/to/file1.ts` | TASK-001, TASK-003 | Sequential (Wave 1 → Wave 2) |
+| `path/to/file1.ts` | TASK-001, TASK-003 | Sequential (dependency enforced) |
 
 ---
 
