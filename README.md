@@ -1,278 +1,201 @@
-# OpenCode Workflow
+# 🚀 OpenCode Workflow
 
-A comprehensive agentic workflow system for [OpenCode](https://opencode.ai), implementing a 6-phase spec-driven development approach with the Ralph Wiggum execution pattern.
+**Stop watching AI spin in circles.** This workflow system makes Claude actually finish what it starts.
 
-## Quick Start
+## The Problem
 
-### Install Everything
+AI coding assistants are powerful but unreliable. They:
+- Lose context mid-task and forget what they were doing
+- Skip steps and leave features half-implemented
+- Don't know when they're actually done
+- Can't handle complex multi-file changes
+
+## The Solution
+
+A **6-phase workflow** that guides AI through complex features from idea to completion, with:
+
+- ✅ **Human approval gates** - You stay in control of direction
+- ✅ **Automatic task decomposition** - Complex work broken into parallel tracks
+- ✅ **Fresh context per task** - No more context rot or forgotten goals
+- ✅ **CI-green enforcement** - Nothing ships until tests pass
+- ✅ **Progress persistence** - Survives crashes, continues where it left off
+
+## Try It in 60 Seconds
+
 ```bash
-./install.sh --only bundle:full-workflow
+# 1. Clone the repo
+git clone https://github.com/liludouglass/opencode-workflow.git
+cd opencode-workflow
+
+# 2. Install to OpenCode
+./install.sh
+
+# 3. Open your project in OpenCode and say:
 ```
 
-### Install Just One Plugin and One Agent
-```bash
-./install.sh --only plugin:ralph-wiggum,agent:implementer
+```
+Add user authentication with Google OAuth
 ```
 
-### Install Just the Agent Workflow (No Plugins)
+That's it. The orchestrator takes over:
+
+```
+Phase 1: SHAPING       → Clarifies requirements, proposes approaches
+                         ⏸️ HUMAN GATE: Approve direction
+
+Phase 2: SPECIFICATION → Creates detailed spec with acceptance criteria
+                         ⏸️ HUMAN GATE: Approve spec
+
+Phase 3: DECOMPOSITION → Breaks work into parallel tasks with dependencies
+
+Phase 4: IMPLEMENTATION → Executes tasks in parallel, fresh context each
+
+Phase 5: INTEGRATION   → Verifies everything works together
+
+Phase 6: COMPLETION    → Summarizes changes, ready to merge
+```
+
+## How It Works
+
+### 🎯 Human Gates Keep You in Control
+
+You approve the **direction** (Phase 1) and **spec** (Phase 2). After that, it's autonomous until completion.
+
+```
+You: "Add dark mode"
+
+AI: "I've analyzed your codebase. Here are two approaches:
+
+     Option A: CSS variables (simpler, 2-3 tasks)
+     Option B: Theme provider (more flexible, 4-5 tasks)
+     
+     I recommend Option A. Approve?"
+
+You: "approved"
+
+AI: [Writes spec, decomposes into tasks, implements, tests, done]
+```
+
+### 🔄 Fresh Context = No More "Forgetting"
+
+Each task gets a **minimal, focused context bundle** (~5K tokens) containing only:
+- The specific spec section for this task
+- Files being modified
+- Acceptance criteria to check
+
+No accumulated garbage. No "wait, what was I doing?"
+
+### ⚡ Parallel Execution
+
+Independent tasks run simultaneously:
+
+```
+TASK-001: Create User model     ─┐
+TASK-002: Add password hashing  ─┼─► run in parallel
+TASK-003: Setup OAuth config    ─┘
+              │
+              ▼
+TASK-004: Implement AuthService  ─► waits for 001-003
+              │
+              ▼
+TASK-005: Add login endpoint     ─► waits for 004
+```
+
+### 🛡️ CI-Green Enforcement
+
+Nothing gets committed until:
+- TypeScript compiles ✓
+- Linter passes ✓
+- Tests pass ✓
+
+No more "it works on my machine" from AI.
+
+## Installation
+
+### Full Workflow (Recommended)
+```bash
+./install.sh
+```
+
+### Just the Core Agents
 ```bash
 ./install.sh --only bundle:core
 ```
 
-### See What's Available
+### Preview First
+```bash
+./install.sh --dry-run
+```
+
+### See All Options
 ```bash
 ./install.sh --list
 ```
 
-### Preview Before Installing
-```bash
-./install.sh --only bundle:core --dry-run
-```
+## Commands
 
-## Installation Options
+| Command | What it does |
+|---------|--------------|
+| `/feature <description>` | Start a new feature (full 6 phases) |
+| `/bug <description>` | Fix a bug (streamlined phases) |
+| `/improve <description>` | Refactor/enhance existing code |
+| `/status` | Check current workflow progress |
 
-The installer is the **PRIMARY feature** of this repository, designed for selective, safe installation:
+Or just describe what you want naturally—the orchestrator figures it out.
 
-| Flag | Description |
-|------|-------------|
-| `--only <components>` | **PRIMARY**: Install only specified components (comma-separated) |
-| `--list` | List all available components and bundles |
-| `--dry-run` | Preview changes without making any modifications |
-| `--backup` | Backup existing files to `~/.config/opencode/.backup/` before replacing |
-| `--force` | Overwrite conflicting files without prompting |
+## Prerequisites
 
-## Component Naming Convention
+1. **[OpenCode](https://opencode.ai)** - The AI coding CLI this extends
+2. **[Ticket CLI](https://github.com/wedow/ticket)** - Task tracking (install via `brew install wedow/tools/ticket`)
 
-```
-agent:<name>      # e.g., agent:orchestrator, agent:implementer
-command:<name>    # e.g., command:feature, command:ralph
-plugin:<name>     # e.g., plugin:ralph-wiggum, plugin:context-manager
-skill:<name>      # e.g., skill:wf-orchestrate, skill:std-api
-tool:<name>       # e.g., tool:count_tokens
-bundle:<name>     # e.g., bundle:core, bundle:full-workflow
-templates         # Workflow templates (.work directory)
-```
+## The Agents
 
-## Available Bundles
+| Agent | Role |
+|-------|------|
+| `@orchestrator` | Routes requests, manages phases |
+| `@shaper` | Clarifies requirements, proposes approaches |
+| `@spec-writer` | Creates detailed specifications |
+| `@decomposer` | Breaks specs into parallel tasks |
+| `@implementer` | Executes individual tasks |
+| `@integrator` | Verifies components work together |
+| `@finalizer` | Wraps up and prepares summary |
 
-| Bundle | Contents |
-|--------|----------|
-| `bundle:core` | Orchestrator, coordination-files, shaper agents + feature/setup/status commands |
-| `bundle:full-workflow` | All agents, commands, skills, plugins, tools, and templates |
-| `bundle:plugins-only` | All plugins |
-| `bundle:ralph` | Ralph-Wiggum pattern (ralph-wiggum plugin + implementer agent + ralph command) |
-| `bundle:research` | Research workflow (research/youtube agents + tools) |
-| `bundle:agents-only` | All agents |
-| `bundle:commands-only` | All commands |
-| `bundle:skills-only` | All skills |
-| `bundle:tools-only` | All tools |
-
-## Safety Features
-
-The installer **MERGES instead of REPLACES** - no `rm -rf` on user files:
-
-- **Conflict detection**: Warns when a file exists that isn't already linked to this repo
-- **Symlink detection**: Safely skips files already linked to this repo  
-- **Backup support**: Use `--backup` to save existing files before replacing
-- **Dry run**: Preview all changes with `--dry-run` before committing
-- **Force override**: Use `--force` only when you want to replace conflicts
-
-### Output Examples
-
-```
-Installing OpenCode Workflow Components...
-
-Selected: plugin:ralph-wiggum, agent:implementer
-
-[INSTALL] agent:implementer -> ~/.config/opencode/agent/implementer.md
-[SKIP] plugin:ralph-wiggum (already linked to this repo)
-[CONFLICT] agent:orchestrator.md exists (use --force to replace, --backup to save first)
-
-Installed: 1 | Skipped: 1 | Conflicts: 1
-```
-
-## More Examples
-
-```bash
-# Install core workflow only
-./install.sh --only bundle:core
-
-# Install Ralph execution pattern
-./install.sh --only bundle:ralph
-
-# Install specific components with backup
-./install.sh --only agent:orchestrator,plugin:context-manager --backup
-
-# Preview full installation
-./install.sh --only bundle:full-workflow --dry-run
-
-# Install research workflow
-./install.sh --only bundle:research
-
-# Install all skills but no agents
-./install.sh --only bundle:skills-only
-
-# Force replace conflicts with backup
-./install.sh --only bundle:core --force --backup
-```
-
-## Overview
-
-This repository contains customizations for OpenCode that enable:
-
-- **6-Phase Workflow**: Shaping -> Specification -> Decomposition -> Implementation -> Integration -> Completion
-- **Ralph Wiggum Execution**: Fresh context iterations with clear stop conditions
-- **Parallel Task Execution**: Ticket-based dependency tracking for parallel task execution
-- **CI-Green Enforcement**: Mandatory passing tests before commits
-- **Context Management**: Minimal, focused context bundles per task
-
-## Structure
-
-```
-opencode-workflow/
-|-- agent/                    # Custom AI agents
-|   |-- orchestrator.md       # Main workflow coordinator
-|   |-- implementer.md        # Task execution agent
-|   |-- shaper.md             # Phase 1: Requirements shaping
-|   |-- spec-writer.md        # Phase 2: Specification writing
-|   |-- ...
-|
-|-- command/                  # Custom slash commands
-|   |-- feature.md            # /feature - Start new feature
-|   |-- bug.md                # /bug - Fix a bug
-|   |-- ralph.md              # /ralph - Run Ralph loop on task
-|   |-- ...
-|
-|-- plugin/                   # TypeScript plugins
-|   |-- visual-feedback/      # Visual feedback plugin
-|   |-- ralph-wiggum/         # Ralph execution plugin
-|   |-- context-manager/      # Context management plugin
-|   |-- ...
-|
-|-- skill/                    # Workflow skills
-|   |-- wf-orchestrate/       # Orchestration guide
-|   |-- std-api/              # API standards
-|   |-- ...
-|
-|-- tool/                     # Custom tools
-|   |-- count_tokens.py       # Token counting utility
-|   |-- google_search.py      # Web search
-|   |-- ...
-|
-|-- templates/                # Workflow templates
-|   |-- .work/
-|       |-- config.yaml       # Default workflow configuration
-|       |-- templates/        # File templates
-|
-|-- install.sh                # Modular installation script
-|-- uninstall.sh              # Removal script
-|-- README.md
-```
-
-## The 6-Phase Workflow
-
-```
-Phase 1: SHAPING       -> @shaper           -> HUMAN GATE (approve approach)
-Phase 2: SPECIFICATION -> @spec-writer      -> HUMAN GATE (approve spec)
-Phase 3: DECOMPOSITION -> @decomposer       -> AUTO (validation only)
-Phase 4: IMPLEMENTATION -> Ralph loops      -> AUTO (per-task verification)
-Phase 5: INTEGRATION   -> @integrator       -> AUTO (loops back on failure)
-Phase 6: COMPLETION    -> @finalizer        -> HUMAN GATE (if flagged)
-```
-
-## Ralph Wiggum Execution Pattern
-
-The Ralph Wiggum approach ensures reliable task completion through:
-
-1. **Fresh Context**: Each iteration starts with minimal, focused context
-2. **Clear Stop Condition**: `<complete/>` signal indicates task completion
-3. **Progress Persistence**: Append-only `progress.md` survives crashes
-4. **CI Enforcement**: Tests must pass before any commit
-
-```
-for iteration in 1..max_iterations:
-    1. Generate fresh context bundle (~5-10K tokens)
-    2. Invoke @implementer with clean slate
-    3. Check for <complete/> signal
-    4. Enforce CI-green before commit
-    5. Append to progress.md
-    
-If max_iterations reached: escalate to human
-```
+Plus verification agents: `@coverage-auditor`, `@quality-gate`, `@security-auditor`, and more.
 
 ## Configuration
 
-Global defaults in `templates/.work/config.yaml`:
+Customize in your project's `.opencode/config.yaml`:
 
 ```yaml
 workflow:
-  max_parallel_tasks: 3
+  max_parallel_tasks: 3    # How many tasks run simultaneously
 
 ralph:
-  max_iterations_per_task: 10
-  complete_signal: "<complete/>"
-  require_ci_green: true
+  max_iterations: 10       # Retries before escalating to human
+  require_ci_green: true   # Enforce passing tests
 
 context:
-  max_tokens_per_task: 8000
-  progress_history: 10
-
-ci:
-  type_check: "bun run type-check"
-  lint: "bun run lint"
-  test: "bun test"
+  max_tokens: 8000         # Context budget per task
 ```
 
-Project-specific overrides in `<project>/.opencode/config.yaml`.
+## Why "Ralph Wiggum"?
 
-## Usage
+Named after [Geoffrey Huntley's technique](https://ghuntley.com/ralph/) for reliable AI task completion:
 
-### Start a New Feature
+> "Give the AI fresh context each iteration. Let it run until it says it's done. If it can't finish in N tries, escalate to a human."
 
-```bash
-# In OpenCode
-/feature Add user authentication with OAuth2
-```
+Simple but powerful.
 
-### Fix a Bug
+## Credits
 
-```bash
-/bug Login fails on Safari when clicking submit
-```
-
-### Run Ralph Loop on Specific Task
-
-```bash
-/ralph TASK-001
-```
-
-## Development
-
-### Adding a New Agent
-
-1. Create `agent/my-agent.md` with YAML frontmatter
-2. Run `./install.sh --only agent:my-agent` to symlink
-3. Use `@my-agent` in OpenCode
-
-### Adding a Plugin
-
-1. Create `plugin/my-plugin/index.ts`
-2. Add `package.json` with dependencies
-3. Run `./install.sh --only plugin:my-plugin` to symlink
-4. Restart OpenCode
-
-## Uninstallation
-
-```bash
-./uninstall.sh
-```
+- [Ralph Wiggum Technique](https://ghuntley.com/ralph/) by Geoffrey Huntley
+- [MAKER Paper](https://arxiv.org/abs/2511.09030) - Multi-agent decomposition research
+- [OpenCode](https://opencode.ai) - The AI coding assistant this extends
 
 ## License
 
 MIT
 
-## Credits
+---
 
-- [Ralph Wiggum Technique](https://ghuntley.com/ralph/) by Geoffrey Huntley
-- [MAKER Paper](https://arxiv.org/abs/2511.09030) - Multi-agent decomposition
-- [OpenCode](https://opencode.ai) - The AI coding assistant
+**Questions?** Open an issue or ping [@liludouglass](https://github.com/liludouglass)
