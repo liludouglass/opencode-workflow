@@ -1,7 +1,6 @@
 ---
 description: "Check code quality, patterns, and enforce CI-green requirements"
 mode: subagent
-model: anthropic/claude-sonnet-4-20250514
 temperature: 0.2
 ---
 

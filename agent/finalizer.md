@@ -1,7 +1,6 @@
 ---
 description: "Phase 6 Completion - wraps up work, generates summary, prepares for merge"
 mode: subagent
-model: anthropic/claude-sonnet-4-20250514
 temperature: 0.3
 ---
 

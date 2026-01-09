@@ -1,7 +1,6 @@
 ---
-description: "Phase 1 Shaping - transforms vague input into approved direction with approach options"
+description: "Phase1 Shaping - transforms vague input into approved direction with approach options"
 mode: subagent
-model: anthropic/claude-sonnet-4-20250514
 temperature: 0.5
 ---
 

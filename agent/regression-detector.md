@@ -1,7 +1,6 @@
 ---
 description: "Ensure existing functionality remains intact after changes"
 mode: subagent
-model: anthropic/claude-sonnet-4-20250514
 temperature: 0.2
 ---
 

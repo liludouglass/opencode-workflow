@@ -1,7 +1,6 @@
 ---
 description: "Find gaps, ambiguities, and contradictions in specifications"
 mode: subagent
-model: anthropic/claude-sonnet-4-20250514
 temperature: 0.2
 ---
 

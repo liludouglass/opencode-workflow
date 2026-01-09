@@ -1,7 +1,6 @@
 ---
 description: "Validate ticket dependency graph for cycles and missing dependencies"
 mode: subagent
-model: anthropic/claude-sonnet-4-20250514
 temperature: 0.2
 ---
 

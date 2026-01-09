@@ -1,7 +1,6 @@
 ---
 description: "Creates and manages work folder structure for features and bugs"
 mode: subagent
-model: anthropic/claude-sonnet-4-20250514
 temperature: 0.2
 tools:
   # File operations - ALLOWED (this is our purpose)

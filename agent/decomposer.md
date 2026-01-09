@@ -1,7 +1,6 @@
 ---
 description: "Phase 3 Decomposition - breaks specs into tickets with dependencies via Ticket CLI"
 mode: subagent
-model: anthropic/claude-sonnet-4-20250514
 temperature: 0.3
 ---
 

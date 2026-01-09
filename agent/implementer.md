@@ -1,7 +1,6 @@
 ---
 description: "Full-stack developer implementing assigned task groups per standards"
 mode: subagent
-model: anthropic/claude-sonnet-4-20250514
 temperature: 0.2
 ---
 

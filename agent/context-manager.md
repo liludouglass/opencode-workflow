@@ -1,7 +1,6 @@
 ---
 description: "Context manager - generates minimal context bundles for agents, maintains token limits"
 mode: subagent
-model: anthropic/claude-sonnet-4-20250514
 temperature: 0.2
 ---
 

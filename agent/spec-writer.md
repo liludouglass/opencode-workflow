@@ -1,7 +1,6 @@
 ---
 description: "Phase 2 Specification - creates zero-ambiguity specs at L2/L3/L4 depth levels"
 mode: subagent
-model: anthropic/claude-sonnet-4-20250514
 temperature: 0.3
 ---
 

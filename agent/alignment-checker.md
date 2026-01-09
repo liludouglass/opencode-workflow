@@ -1,7 +1,6 @@
 ---
 description: "Verify implemented code matches the specification section"
 mode: subagent
-model: anthropic/claude-sonnet-4-20250514
 temperature: 0.2
 ---
 
