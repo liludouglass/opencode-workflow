@@ -33,8 +33,8 @@ Before starting your own discovery process, check if @discovery has already run:
 
 1. **Find discovery.md**:
    - Check work folder path provided by orchestrator
-   - Check `.opencode/discovery/<feature-slug>/discovery.md`
-   - Use glob to find: `.opencode/discovery/*/discovery.md`
+   - Check `.opencode/features/FEAT-XXX-<slug>/discovery.md`
+   - Use glob to find: `.opencode/features/FEAT-*/discovery.md`
 
 2. **If discovery.md exists**:
    - Read and internalize all sections
@@ -226,7 +226,7 @@ If discovery.md was used as input, add to approach.md:
 ```markdown
 ## Discovery Reference
 
-**Discovery document**: `.opencode/discovery/<slug>/discovery.md`
+**Discovery document**: `.opencode/features/FEAT-XXX-<slug>/discovery.md`
 
 ### Carried Forward from Discovery
 - **Problem**: [from discovery]

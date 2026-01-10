@@ -296,14 +296,14 @@ Wait for: folder path confirmation
 - User says "let's brainstorm", "help me plan", "I'm not sure what I need"
 
 **Skip when**:
-- discovery.md already exists at `.opencode/discovery/<slug>/`
+- discovery.md already exists at `.opencode/features/FEAT-XXX-<slug>/discovery.md`
 - Request is simple and clear (e.g., "fix the login button")
 - User explicitly wants to skip to shaping
 
 **Your action**:
 ```
 1. Check for existing discovery.md:
-   - glob: .opencode/discovery/*/discovery.md
+   - glob: .opencode/features/FEAT-*/discovery.md
    
 2. If discovery.md exists:
    - "Discovery already exists at [path]. Proceeding to Phase 1 (Shaping)..."
@@ -323,7 +323,7 @@ Wait for: folder path confirmation
    - Proceed to Phase 1 with discovery.md path
 ```
 
-**Output**: `discovery.md` at `.opencode/discovery/<feature-slug>/discovery.md`
+**Output**: `discovery.md` at `.opencode/features/FEAT-XXX-<slug>/discovery.md`
 
 **Next**: Proceed to Phase 1 (Shaping) with discovery context
 
@@ -340,7 +340,7 @@ Invoke @shaper with:
 - Original request description
 - Request type (feature/bug/improve)
 - Work folder path (from Phase 0)
-- Discovery path (if exists): .opencode/discovery/<slug>/discovery.md
+- Discovery path (if exists): .opencode/features/FEAT-XXX-<slug>/discovery.md
 
 Wait for: approach.md creation
 ```

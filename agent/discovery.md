@@ -99,9 +99,9 @@ Orchestrator invokes you as part of the feature workflow.
 ### Phase 4: Finalize Discovery
 **Goal:** Create structured discovery.md and offer next steps
 
-1. Write discovery.md to `.opencode/discovery/<feature-slug>/discovery.md`
-   - Generate slug from feature name (lowercase, hyphenated)
-   - Create directory if it doesn't exist
+1. Write discovery.md to `.opencode/features/FEAT-XXX-<slug>/discovery.md`
+   - Use the work folder path from Phase 0 when available
+   - Create the folder if it doesn't exist
 2. Present summary to user
 3. Offer completion options:
    ```
@@ -112,7 +112,7 @@ Orchestrator invokes you as part of the feature workflow.
 
 ## Discovery.md Template
 
-Save to: `.opencode/discovery/<feature-slug>/discovery.md`
+Save to: `.opencode/features/FEAT-XXX-<slug>/discovery.md`
 
 ```markdown
 # Discovery: [Feature Name]
@@ -222,7 +222,7 @@ When discovery is complete:
 ## Discovery Complete
 
 I've documented our findings in:
-`.opencode/discovery/<feature-slug>/discovery.md`
+`.opencode/features/FEAT-XXX-<slug>/discovery.md`
 
 ### Summary
 [2-3 sentence summary of what we discovered]
@@ -248,7 +248,7 @@ When user chooses "start workflow":
    ```
    <discovery_complete>
    Feature: [feature name]
-   Discovery: .opencode/discovery/<feature-slug>/discovery.md
+   Discovery: .opencode/features/FEAT-XXX-<slug>/discovery.md
    Ready for: Phase 1 (Shaping)
    </discovery_complete>
    ```

@@ -96,7 +96,7 @@ After creating spec.md:
 
 ### Step 0.7: Cross-Reference Discovery
 
-If discovery.md exists in the work folder or at `.opencode/discovery/<slug>/`:
+If discovery.md exists in the work folder or at `.opencode/features/FEAT-XXX-<slug>/discovery.md`:
 
 1. **Read discovery.md completely**
 2. **Create a coverage checklist**:
