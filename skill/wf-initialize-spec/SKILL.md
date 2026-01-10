@@ -48,7 +48,7 @@ SPEC_NAME="[kebab-case-name]"
 DATED_SPEC_NAME="${TODAY}-${SPEC_NAME}"
 
 # Store this path for output
-SPEC_PATH=".opencode/spec/$DATED_SPEC_NAME"
+SPEC_PATH=".opencode/features/$DATED_SPEC_NAME/spec"
 
 # Create folder structure following architecture
 mkdir -p $SPEC_PATH/planning

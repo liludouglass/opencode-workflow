@@ -20,13 +20,13 @@ Run these commands to generate the current-focus.md file:
 
 ```bash
 # Get ready tasks
-tk ready --dir .opencode/spec/FEAT-XXX/tickets
+tk ready --dir .opencode/features/FEAT-XXX/spec/tickets
 
 # Get blocked tasks  
-tk blocked --dir .opencode/spec/FEAT-XXX/tickets
+tk blocked --dir .opencode/features/FEAT-XXX/spec/tickets
 
 # Get deferred items targeting current feature
-tk query '.type == "deferred"' --dir .opencode/spec/FEAT-XXX/tickets
+tk query '.type == "deferred"' --dir .opencode/features/FEAT-XXX/spec/tickets
 ```
 
 Write the output to `.opencode/memory/current-focus.md`.

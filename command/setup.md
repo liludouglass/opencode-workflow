@@ -24,22 +24,22 @@ Use a single `bash` command with `mkdir -p`. The folders depend on the profile:
 
 **web** (default):
 ```bash
-mkdir -p .opencode/product .opencode/spec .opencode/memory .opencode/standards/global .opencode/standards/backend .opencode/standards/frontend .opencode/standards/testing
+mkdir -p .opencode/product .opencode/features .opencode/memory .opencode/standards/global .opencode/standards/backend .opencode/standards/frontend .opencode/standards/testing
 ```
 
 **mobile**:
 ```bash
-mkdir -p .opencode/product .opencode/spec .opencode/memory .opencode/standards/global .opencode/standards/mobile .opencode/standards/backend .opencode/standards/testing
+mkdir -p .opencode/product .opencode/features .opencode/memory .opencode/standards/global .opencode/standards/mobile .opencode/standards/backend .opencode/standards/testing
 ```
 
 **api**:
 ```bash
-mkdir -p .opencode/product .opencode/spec .opencode/memory .opencode/standards/global .opencode/standards/backend .opencode/standards/testing
+mkdir -p .opencode/product .opencode/features .opencode/memory .opencode/standards/global .opencode/standards/backend .opencode/standards/testing
 ```
 
 **cli**:
 ```bash
-mkdir -p .opencode/product .opencode/spec .opencode/memory .opencode/standards/global .opencode/standards/cli .opencode/standards/testing
+mkdir -p .opencode/product .opencode/features .opencode/memory .opencode/standards/global .opencode/standards/cli .opencode/standards/testing
 ```
 
 ### Step 2: Create Skeleton Files
@@ -379,7 +379,7 @@ Created .opencode/ structure (profile: {profile}):
     roadmap.md
     tech-stack.md
   
-  spec/                     (empty - created per-feature)
+  features/                 (empty - created per-feature)
   
   memory/
     decisions.md

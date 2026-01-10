@@ -28,14 +28,14 @@ You are responsible for:
 
 2. **Verify deferred tickets exist**:
    ```bash
-   tk query '.type == "deferred"' --dir .opencode/spec/FEAT-XXX/tickets
+   tk query '.type == "deferred"' --dir .opencode/features/FEAT-XXX/spec/tickets
    ```
 
 3. **Create missing deferred tickets**:
    ```bash
    tk create "[Item description]" \
      --type deferred \
-     --dir .opencode/spec/FEAT-XXX/tickets
+     --dir .opencode/features/FEAT-XXX/spec/tickets
    ```
 
 4. **Update ticket with metadata** by editing the ticket file:

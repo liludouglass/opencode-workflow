@@ -27,32 +27,6 @@ Status: [in_progress | <complete/>]
 <!-- Entries are appended below, newest at bottom -->
 <!-- When task is complete, agent emits <complete/> in Status -->
 
-### Example Entry (for reference, delete when first real entry added)
-
-## 2026-01-04 10:00 - TASK-001 - Iteration 1
-Agent: @implementer
-Action: Created initial file structure and base implementation
-Files: 
-  - src/models/example.ts (created)
-  - src/services/example.ts (created)
-Tests: 3 passing, 0 failing, 2 pending
-Commit: abc1234
-Status: in_progress
-
----
-
-## 2026-01-04 10:15 - TASK-001 - Iteration 2
-Agent: @implementer
-Action: Added validation logic and completed remaining tests
-Files:
-  - src/models/example.ts (modified)
-  - src/services/example.ts (modified)
-Tests: 5 passing, 0 failing, 0 pending
-Commit: def5678
-Status: <complete/>
-
----
-
 ## Signal Reference
 
 ### `<complete/>` Signal
@@ -80,3 +54,28 @@ If `max_iterations_per_task` (default: 10) is reached without `<complete/>`:
 ---
 
 <!-- Log continues below -->
+
+## 2026-01-10 12:55 - FEAT-002-docs - Iteration 1
+Agent: @implementer
+Action: Updated doc/agent/skill paths to feature-local spec directories and tk CLI flags; refreshed setup output and prerequisites note.
+Files:
+  - command/build.md (modified)
+  - command/ctx.md (modified)
+  - command/status.md (modified)
+  - command/feature.md (modified)
+  - command/setup.md (modified)
+  - docs/prerequisites.md (modified)
+  - agent/orchestrator.md (modified)
+  - agent/spec-writer.md (modified)
+  - agent/integrator.md (modified)
+  - agent/decomposer.md (modified)
+  - agent/coverage-auditor.md (modified)
+  - agent/context-manager.md (modified)
+  - agent/deferred-tracker.md (modified)
+  - skill/wf-context-recitation/SKILL.md (modified)
+  - skill/wf-implement-tasks/SKILL.md (modified)
+  - skill/wf-orchestrate/SKILL.md (modified)
+  - skill/wf-initialize-spec/SKILL.md (modified)
+Tests: not run (docs only)
+Commit: uncommitted
+Status: in_progress

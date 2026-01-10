@@ -69,7 +69,7 @@ For each item in "Sections Deferred":
    ```bash
    tk create "[Section Description]" \
      --type deferred \
-     --dir .opencode/spec/FEAT-XXX/tickets
+     --dir .opencode/features/FEAT-XXX/spec/tickets
    ```
 
 2. **Update the ticket file** to add custom fields:

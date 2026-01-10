@@ -122,7 +122,7 @@ Create an epic ticket for the feature:
 ```bash
 tk create "[Feature Name]" \
   --type epic \
-  --dir .opencode/spec/FEAT-XXX/tickets
+  --dir .opencode/features/FEAT-XXX/spec/tickets
 ```
 
 Update epic ticket file to add:
@@ -140,7 +140,7 @@ tk create "[Task description]" \
   --type task \
   --priority [1-4] \
   --parent [epic-id] \
-  --dir .opencode/spec/FEAT-XXX/tickets
+  --dir .opencode/features/FEAT-XXX/spec/tickets
 ```
 
 Update each ticket file to add:
@@ -168,14 +168,14 @@ tk dep [task-id] [dependency-id]
 tk dep tree [epic-id]
 
 # Verify all tasks have parent
-tk query '.type == "task" and .parent == null' --dir .opencode/spec/FEAT-XXX/tickets
+tk query '.type == "task" and .parent == null' --dir .opencode/features/FEAT-XXX/spec/tickets
 ```
 
 This should return empty if all tasks are properly parented.
 
 ## Output Format
 
-Create ticket files in `.opencode/spec/FEAT-XXX/tickets/` using the Ticket CLI:
+Create ticket files in `.opencode/features/FEAT-XXX/spec/tickets/` using the Ticket CLI:
 
 - **Epic ticket** for the feature
 - **Task tickets** for each task
@@ -233,13 +233,13 @@ Emit `<complete/>` when:
 
 ```bash
 # Create epic
-tk create "User Authentication System" --type epic --dir .opencode/spec/FEAT-001/tickets
+tk create "User Authentication System" --type epic --dir .opencode/features/FEAT-001/spec/tickets
 
 # Create task tickets
-tk create "Create User data model" --type task --priority 2 --parent EPIC-001 --dir .opencode/spec/FEAT-001/tickets
-tk create "Create password hashing utilities" --type task --priority 2 --parent EPIC-001 --dir .opencode/spec/FEAT-001/tickets
-tk create "Implement AuthService core methods" --type task --priority 1 --parent EPIC-001 --dir .opencode/spec/FEAT-001/tickets
-tk create "Add authentication middleware" --type task --priority 1 --parent EPIC-001 --dir .opencode/spec/FEAT-001/tickets
+tk create "Create User data model" --type task --priority 2 --parent EPIC-001 --dir .opencode/features/FEAT-001/spec/tickets
+tk create "Create password hashing utilities" --type task --priority 2 --parent EPIC-001 --dir .opencode/features/FEAT-001/spec/tickets
+tk create "Implement AuthService core methods" --type task --priority 1 --parent EPIC-001 --dir .opencode/features/FEAT-001/spec/tickets
+tk create "Add authentication middleware" --type task --priority 1 --parent EPIC-001 --dir .opencode/features/FEAT-001/spec/tickets
 
 # Set dependencies
 tk dep TASK-003 TASK-001  # AuthService depends on User model

@@ -92,7 +92,7 @@ Verify all tasks in the epic are complete using Ticket CLI:
 
 1. **Query incomplete tasks**:
    ```bash
-   tk query '.parent == "[epic-id]" and .type == "task" and .status != "closed"' --dir .opencode/spec/FEAT-XXX/tickets
+   tk query '.parent == "[epic-id]" and .type == "task" and .status != "closed"' --dir .opencode/features/FEAT-XXX/spec/tickets
    ```
 
 2. **If any incomplete**:
@@ -110,7 +110,7 @@ Check for deferred items that target this feature:
 
 1. **Query deferred items targeting this feature**:
    ```bash
-   tk query '.type == "deferred" and .["target-after"] == "[current-feature]"' --dir .opencode/spec/FEAT-XXX/tickets
+   tk query '.type == "deferred" and .["target-after"] == "[current-feature]"' --dir .opencode/features/FEAT-XXX/spec/tickets
    ```
 
 2. **For each deferred item found**:
@@ -201,7 +201,7 @@ tk create --type bug --title "[Description]" --priority high \
 Symptom: [what's broken]
 Expected: [what should happen]
 Actual: [what happens instead]" \
-  --dir .opencode/spec/FEAT-XXX/tickets
+  --dir .opencode/features/FEAT-XXX/spec/tickets
 ```
 
 ### If Verification Agents Report Issues

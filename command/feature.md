@@ -105,7 +105,7 @@ Starts: Phase 1 with @shaper
 After completion, the work folder contains:
 
 ```
-.opencode/spec/FEAT-001-user-auth-oauth2/
+.opencode/features/FEAT-001-user-auth-oauth2/spec/
 ├── approach.md            # Phase 1 - Approved direction (with master spec sections)
 ├── spec.md                # Phase 2 - Full specification (with coverage table)
 ├── acceptance.md          # Phase 2 - Checkable criteria

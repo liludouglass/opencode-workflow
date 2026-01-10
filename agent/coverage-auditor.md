@@ -17,7 +17,7 @@ You are invoked during **Phase 3 (Decomposition)** in parallel with @dependency-
 You receive:
 1. **spec.md** - The full specification with requirements
 2. **acceptance.md** - Extracted acceptance criteria
-3. **Ticket directory** (`.opencode/spec/FEAT-XXX/tickets/`) - The ticket breakdown to validate via `tk` CLI
+3. **Ticket directory** (`.opencode/features/FEAT-XXX/spec/tickets/`) - The ticket breakdown to validate via `tk` CLI
 
 # Coverage Criteria
 
@@ -56,19 +56,19 @@ Use these `tk` CLI commands to analyze ticket coverage:
 
 ```bash
 # List all tickets
-tk query --dir .opencode/spec/FEAT-XXX/tickets
+tk query --dir .opencode/features/FEAT-XXX/spec/tickets
 
 # Get ticket details
-tk show <ticket-id> --dir .opencode/spec/FEAT-XXX/tickets
+tk show <ticket-id> --dir .opencode/features/FEAT-XXX/spec/tickets
 
 # Query tickets by spec section
-tk query '.["spec-section"]' --dir .opencode/spec/FEAT-XXX/tickets
+tk query '.["spec-section"]' --dir .opencode/features/FEAT-XXX/spec/tickets
 
 # Query tickets by acceptance criteria
-tk query '.["acceptance-criteria"]' --dir .opencode/spec/FEAT-XXX/tickets
+tk query '.["acceptance-criteria"]' --dir .opencode/features/FEAT-XXX/spec/tickets
 
 # Find tickets covering specific criteria
-tk query '.["acceptance-criteria"] | contains(["AC-1"])' --dir .opencode/spec/FEAT-XXX/tickets
+tk query '.["acceptance-criteria"] | contains(["AC-1"])' --dir .opencode/features/FEAT-XXX/spec/tickets
 ```
 
 ## Master Spec Coverage Verification
@@ -87,12 +87,12 @@ For each master spec requirement claimed as implemented:
 
 1. Search tickets for matching acceptance criteria:
    ```bash
-   tk query '.["acceptance-criteria"]' --dir .opencode/spec/FEAT-XXX/tickets | grep -i "[keyword]"
+   tk query '.["acceptance-criteria"]' --dir .opencode/features/FEAT-XXX/spec/tickets | grep -i "[keyword]"
    ```
 
 2. Or check spec-section field:
    ```bash
-   tk query '.["spec-section"] == "X.X"' --dir .opencode/spec/FEAT-XXX/tickets
+   tk query '.["spec-section"] == "X.X"' --dir .opencode/features/FEAT-XXX/spec/tickets
    ```
 
 3. If requirement not covered by any ticket, flag as **CRITICAL GAP**
@@ -103,7 +103,7 @@ For each section marked "Deferred" in spec.md:
 
 1. Verify a deferred ticket exists:
    ```bash
-   tk query '.type == "deferred" and .["spec-section"] == "X.X"' --dir .opencode/spec/FEAT-XXX/tickets
+   tk query '.type == "deferred" and .["spec-section"] == "X.X"' --dir .opencode/features/FEAT-XXX/spec/tickets
    ```
 
 2. If not found, flag as **TRACKING GAP**

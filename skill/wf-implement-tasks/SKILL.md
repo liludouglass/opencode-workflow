@@ -12,7 +12,7 @@ Execute tasks using the Ralph Wiggum approach with fresh context, micro-decompos
 ## When to Use
 
 - After Phase 3 (Decomposition) is validated
-- When tickets are created in `.opencode/spec/FEAT-XXX/tickets/`
+- When tickets are created in `.opencode/features/FEAT-XXX/spec/tickets/`
 - When ready to write actual code
 
 ## Agent References
@@ -26,7 +26,7 @@ Execute tasks using the Ralph Wiggum approach with fresh context, micro-decompos
 
 ## Input Requirements
 
-- Ticket directory: `.opencode/spec/FEAT-XXX/tickets/`
+- Ticket directory: `.opencode/features/FEAT-XXX/spec/tickets/`
 - `spec.md` for reference
 - `acceptance.md` for criteria
 - `progress.md` for continuity

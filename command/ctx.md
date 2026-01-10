@@ -10,7 +10,7 @@ Save and load project context snapshots for continuity across sessions.
 
 ### If action is "save":
 1. Read key project files:
-   - `.opencode/spec.md` (if exists)
+   - `.opencode/features/FEAT-XXX/spec/spec.md` (if exists)
    - Query tickets via `tk query` (if tickets exist)
    - `.opencode/scratchpad.md` (if exists)
    - `README.md` or `package.json` or `pyproject.toml`

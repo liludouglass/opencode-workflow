@@ -394,7 +394,7 @@ Wait for: spec.md, acceptance.md, audit-report.md
 2. @decomposer creates:
    - Epic ticket for the feature
    - Task tickets with dependencies via `tk dep`
-   - Output in `.opencode/spec/FEAT-XXX/tickets/`
+   - Output in `.opencode/features/FEAT-XXX/spec/tickets/`
 
 3. After tickets created, invoke in parallel:
    - @coverage-auditor (ensure full spec coverage + master spec coverage)
@@ -419,7 +419,7 @@ Wait for: ticket files in tickets/ folder
 
 **Invoke when**: Phase 3 complete and tickets validated
 
-**Ticket directory**: `.opencode/spec/FEAT-XXX/tickets`
+**Ticket directory**: `.opencode/features/FEAT-XXX/spec/tickets`
 
 **Your action**:
 ```
@@ -535,7 +535,7 @@ Where <slug> is a URL-safe summary (max 30 chars)
 ### Folder Structure
 
 ```
-.opencode/spec/FEAT-001-user-auth/
+.opencode/features/FEAT-001-user-auth/spec/
 ├── approach.md            # Phase 1 output
 ├── spec.md                # Phase 2 output (with master spec coverage table)
 ├── acceptance.md          # Phase 2 output

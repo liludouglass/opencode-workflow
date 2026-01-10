@@ -42,10 +42,12 @@ tk init  # In project directory to create .tickets/
 
 For our workflow, tickets are created per-feature:
 ```
-.opencode/spec/FEAT-001-user-auth/tickets/
+.opencode/features/FEAT-001-user-auth/spec/tickets/
 ```
 
-Use `--dir` flag: `tk create "Task" --type task --dir .opencode/spec/FEAT-XXX/tickets`
+Use `--dir` flag: `tk create "Task" --type task --dir .opencode/features/FEAT-XXX/spec/tickets`
+
+Note: `.opencode/specs/` (plural) remains reserved for debug/bug workflows and is unchanged.
 
 ## Other Requirements
 

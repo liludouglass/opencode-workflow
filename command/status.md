@@ -8,7 +8,7 @@ Provide a quick status overview of the current project.
 
 ## Check These Files
 
-1. **Spec Status**: Check if `.opencode/spec.md` exists
+1. **Spec Status**: Check if `.opencode/features/FEAT-XXX/spec/spec.md` exists
 2. **Tasks Status**: Query tickets via `tk query` and count open/closed
 3. **Scratchpad**: Check if `.opencode/scratchpad.md` has content
 4. **Git Status**: Run `git status --short` if in a git repo

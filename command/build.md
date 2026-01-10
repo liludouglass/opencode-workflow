@@ -18,7 +18,7 @@ Execute the full spec-driven development workflow for: $ARGUMENTS
 ## Context Files
 
 If these exist in the project, load them:
-- `.opencode/spec.md` - Technical specification
+- `.opencode/features/FEAT-XXX/spec/spec.md` - Technical specification
 - `.opencode/requirements.md` - User requirements  
 - Query tickets via `tk query` - Task breakdown
 

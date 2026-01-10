@@ -30,7 +30,7 @@ Once tickets are created, use `tk ready` to see available tickets.
 
 ### NEXT: Create orchestration.yml to serve as a roadmap for orchestration of task groups
 
-In this spec's folder, create this file: `.opencode/spec/[this-spec]/orchestration.yml`.
+In this spec's folder, create this file: `.opencode/features/[this-spec]/spec/orchestration.yml`.
 
 Run `tk ready` to get available tickets, then populate this file with ticket IDs grouped by their task group. Use this EXACT structure for the content of `orchestration.yml`:
 
@@ -162,7 +162,7 @@ Loop through each task group's tickets via `tk ready` and delegate implementatio
 
 For each delegation, provide the subagent with:
 - The ticket IDs for this task group (from `orchestration.yml`)
-- The spec file: `.opencode/spec/[this-spec]/spec.md`
+- The spec file: `.opencode/features/[this-spec]/spec/spec.md`
 - Instruct subagent to:
   - Load the implementation workflow: `/skill wf-implement-tasks`
   - Perform their implementation
@@ -207,7 +207,7 @@ To delegate to a subagent in OpenCode, use the @mention syntax:
 **Tickets:** [ticket-id-1, ticket-id-2, ...]
 Use `tk show <id>` to view each ticket's details.
 
-**Spec:** Read `.opencode/spec/[this-spec]/spec.md`
+**Spec:** Read `.opencode/features/[this-spec]/spec/spec.md`
 
 **Standards:** Load the following before implementing:
 [List of /skill std-* commands]

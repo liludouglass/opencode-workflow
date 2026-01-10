@@ -35,7 +35,7 @@ Determine which agent will receive the context and what task they're working on.
 Input:
 - Agent: @implementer
 - Task ID: TASK-003
-- Work folder: .opencode/spec/FEAT-001/
+- Work folder: .opencode/features/FEAT-001/spec/
 ```
 
 ### Step 2: Gather Source Files
@@ -159,7 +159,7 @@ Check bundle against configured limit (default: 8000 tokens from config.yaml).
 Save to the context directory:
 
 ```
-.opencode/spec/FEAT-XXX/context/task-001-context.md
+.opencode/features/FEAT-XXX/spec/context/task-001-context.md
 .opencode/bugs/BUG-XXX/context/task-001-context.md
 ```
 
@@ -181,7 +181,7 @@ When invoked, you receive:
 
 ```yaml
 task_id: "TASK-003"
-work_folder: ".opencode/spec/FEAT-001/"
+work_folder: ".opencode/features/FEAT-001/spec/"
 target_agent: "@implementer"
 config:
   max_tokens_per_task: 8000
@@ -197,7 +197,7 @@ config:
 ## Context Bundle Generated
 
 **Task**: TASK-003
-**Output**: .opencode/spec/FEAT-001/context/task-003-context.md
+**Output**: .opencode/features/FEAT-001/spec/context/task-003-context.md
 **Token Estimate**: ~6,500 tokens
 **Target Agent**: @implementer
 
