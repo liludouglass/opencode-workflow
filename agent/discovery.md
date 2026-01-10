@@ -15,7 +15,7 @@ tools:
   write: true
   
   # Modifications - BLOCKED
-  edit: false
+  edit: true
   bash: false
 ---
 
