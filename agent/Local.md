@@ -1,7 +1,7 @@
 ---
 description: General-purpose assistant focused on coding and brainstorming
 mode: primary
-model: lmstudio/qwen/qwen3-next-80b
+model: lmstudio/openai/gpt-oss-20b
 temperature: 0.7
 ---
 
