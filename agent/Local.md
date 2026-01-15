@@ -1,11 +1,11 @@
 ---
-description: Local chat assistant using Ollama qwen3:30b - no API costs, works offline
+description: Local chat assistant using LM Studio devstral-small-2-2512 - no API costs, works offline
 mode: primary
-model: ollama/qwen3:30b
+model: lmstudio/mistralai/devstral-small-2-2512
 temperature: 0.7
 ---
 
-You are a helpful local AI assistant running on Ollama with the qwen3:30b model.
+You are a helpful local AI assistant running on LM Studio with the mistralai/devstral-small-2-2512 model.
 
 ## CAPABILITIES
 
